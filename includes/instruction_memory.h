@@ -15,7 +15,7 @@ namespace Emulator {
             string content;
             
         public:
-            data_t mData;
+            data_t* mData;
 
             InstructionMemory(string file_name, data_t &data);
             void clock_up();

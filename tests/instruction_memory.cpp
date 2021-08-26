@@ -4,7 +4,8 @@
 int main (int argc, char** argv) {
     Emulator::data_t data;
     data.running = true;
-    data.PC_to_IM = 0x0;
+    data.PC_to_IM = std::atoi(argv[2]);
+    data.instruction = 0x0;
 
     Emulator::InstructionMemory im(argv[1], data);
 

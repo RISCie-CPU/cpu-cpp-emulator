@@ -28,12 +28,12 @@ namespace Emulator {
 
     InstructionMemory::InstructionMemory(string file_name, data_t &data) {
         content = readfile(file_name.c_str());
-        mData = data;
+        mData = &data;
     }
 
     void InstructionMemory::clock_up() {
         char* file_bytes = string_to_chr_array(content);
-        int address = mData.PC_to_IM / 4;
+        int address = mData->PC_to_IM / 4;
 
 
         if (address >= content.length() / 4) {
@@ -41,15 +41,13 @@ namespace Emulator {
             throw;
         }
 
-        mData.instruction = (uint32_t) *(file_bytes + (address * 4)) +
+        mData->instruction = (uint32_t) *(file_bytes + (address * 4)) +
             (*(file_bytes + 1 + (address * 4)) << 8) +
             (*(file_bytes + 2 + (address * 4)) << 16) +
             (*(file_bytes + 3 + (address * 4)) << 24);
 
-        if (mData.instruction == 0x6f) {
-            mData.running = false;
+        if (mData->instruction == 0x6f) {
+            mData->running = false;
         }
-
-        printf("0x%08x\n", mData.instruction);
     }
 }

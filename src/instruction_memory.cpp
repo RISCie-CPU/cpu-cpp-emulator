@@ -3,7 +3,7 @@
 #include<fstream>
 
 
-const char *type_words[]{
+const char *type_words[]={
     "U_TYPE",
     "J_TYPE",
     "I_TYPE",

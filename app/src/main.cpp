@@ -1,8 +1,9 @@
+#include <iostream>
+
 #include "types.h"
 #include "instruction_memory.h"
 #include "control_unit.h"
 #include "program_counter.h"
-#include <iostream>
 
 #define UNUSED_VAL 4294967295
 #define END_INSTRUCTION 0       // Placeholder for instruction that jumps to itself

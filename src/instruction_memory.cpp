@@ -1,7 +1,7 @@
 #include "../includes/instruction_memory.h"
 #include<iostream>
 #include<fstream>
-
+#include<cmath>
 
 const char *type_words[]={
     "U_TYPE",
@@ -118,9 +118,12 @@ DecodedInst::DecodedInst(){
 
 void DecodedInst::print_info(){
     std::cout<<"\n--------------------------------------------\n";
+    std::cout<<"Instruction: 0x"<<std::hex<<instruction<<std::endl;
     std::cout<<"Type: "<<type_words[my_type]<<std::endl;
     if (opcode != UNUSED_VAL) std::cout<<"Opcode: 0x"<<std::hex<<opcode<<std::endl;
-    if (imm != UNUSED_VAL) std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
+    // if (imm != UNUSED_VAL) std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
+    // Immediate can be -1 (=UNUSED_VAL) so the if statement is not useful here
+    std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
     //if (imm != UNUSED_VAL) std::cout << "Imm = " << std::bitset<32>(imm)  << std::endl;
     if (rs1 != UNUSED_VAL) std::cout<<"rs1: 0x"<<std::hex<<rs1<<std::endl;
     if (rs2 != UNUSED_VAL) std::cout<<"rs2: 0x"<<std::hex<<rs2<<std::endl;
@@ -143,6 +146,16 @@ unsigned int DecodedInst::get_bits(int high_bit, int low_bit){
     return (instruction & mask)>>low_bit;
 }
 
+signed int DecodedInst::sign_extend(signed int data, int data_lenght){
+    int remaining_bits = 32 - data_lenght;
+    int mask = pow(2, data_lenght) - 1;
+
+    signed int sign_extended_data = (get_bits(31, 20) & mask) << remaining_bits;
+    sign_extended_data >>= remaining_bits;
+
+    return sign_extended_data;
+}
+
 bool DecodedInst::process_inst(unsigned int instruction_in){
     instruction = instruction_in;
     return process_inst();
@@ -152,6 +165,8 @@ bool DecodedInst::process_inst(unsigned int instruction_in){
 bool DecodedInst::process_inst(){
     //Grab obcode from bit 6 downto 0
     opcode = get_bits(6,0);
+
+    // F: Sign extend using intiger size property
 
     // Instruction Encoding depends on the instruction type.
     switch(opcode){
@@ -167,62 +182,70 @@ bool DecodedInst::process_inst(){
         case 0x03:
             // lb, lh, lw, lbu, lhu
             my_type = I_TYPE;
-            imm = get_bits( 31, 20);
+            imm = sign_extend(get_bits(31, 20), 12);
             rs1 = get_bits(19,15);
             func3 = get_bits(14,12);
             rd = get_bits(11, 7);
             break;
         case 0x13:
+        {   // TODO: Added brackets here so I can initialise variables inside (make this for every case statement)
             // addi, slli, xori, srai, srai, srli, ori, andi
             my_type = I_TYPE;
-            imm = get_bits( 31, 20);
+            imm = sign_extend(get_bits(31, 20), 12);
             rs1 = get_bits(19,15);
             func3 = get_bits(14,12);
             rd = get_bits(11, 7);
             break;
+        }
         case 0x23:
             //sb, sh, sw
             my_type = S_TYPE;
             // Double Check this logic
-            imm = (get_bits(31,25)<<5) + (get_bits(11,7));
+            imm = sign_extend((get_bits(31,25)<<5) + (get_bits(11,7)), 12);
             rs2=get_bits(24,20);
             rs1 = get_bits(19,15);
             func3= get_bits(14,12);
             break;
         case 0x63:
+        {
             //beq, bne, blt, bge, bltu, bgeu
             my_type = B_TYPE;
             //Check this math, note, last bit is always 0
-            imm=(get_bits(31,31)<<12)+(get_bits(7,7)<<11)+(get_bits(30,25)<<5)+(get_bits(11,8)<<1);
+            int temp_imm = (get_bits(31,31)<<12)+(get_bits(7,7)<<11)+(get_bits(30,25)<<5)+(get_bits(11,8)<<1);
+            imm = sign_extend(temp_imm, 13);
             rs2 = get_bits(24,20);
             rs1 = get_bits(19,15);
             func3 = get_bits(14,12);
             break;
+        }
         case 0x37:
             //lui
             my_type = U_TYPE;
-            imm = get_bits(31,12);
+            imm = get_bits(31,12) << 12;    // F: bitshift added and tested
             rd = get_bits(11,7);
             break;
         case 0x67:
             //jalr
             my_type = I_TYPE;
-            imm = get_bits( 31, 20);
+            imm = sign_extend(get_bits(31, 20), 12);
             rs1 = get_bits(19,15);
             func3 = get_bits(14,12);
             rd = get_bits(11, 7);
             break;
         case 0x6F:
+        {
             //jal
             my_type = J_TYPE;
             // Note bit 0 is always 0
-            imm = (get_bits(31,31)<<20)+(get_bits(19,12)<<12)+(get_bits(20,20)<<11)+(get_bits(30,21)<<1);
+            int temp_imm = (get_bits(31,31)<<20)+(get_bits(19,12)<<12)+(get_bits(20,20)<<11)+(get_bits(30,21)<<1);
+            imm = sign_extend(temp_imm, 21);
             rd = get_bits(11,7);
             break;
+        }
         case 0x17:
             //auipc
             my_type = U_TYPE;
-            imm = get_bits(31,12);
+            imm = get_bits(31,12) << 12;
             rd = get_bits(11,7);
             break;
         default:

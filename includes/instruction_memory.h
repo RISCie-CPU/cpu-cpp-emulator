@@ -32,6 +32,13 @@ class DecodedInst{
         // Returns an integer found by reading high_bit downto low_bit
         unsigned int get_bits(int high_bit, int low_bit);
 
+
+        // Returns signed integer (32-bits) / extend the sign bit to 32 bits
+        // params:
+        //      data - input data to sign extend
+        //      data_lenght - in number of bits (ie 12)
+        signed int sign_extend(signed int data, int data_lenght);
+
         // Assigns all values based on instruction data and accepts instruction
         bool process_inst(unsigned int instruction_in);
 
@@ -46,6 +53,8 @@ class InstructionMemory {
     public:
         InstructionMemory(char* file_name);
         unsigned int num_instructions;
+        
+        DecodedInst get_decoded_inst();
         DecodedInst get_decoded_inst(unsigned int number);
 };
 

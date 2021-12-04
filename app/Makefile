@@ -66,7 +66,7 @@ OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(CPP_SOURCES:.cpp=.o)))
 vpath %.cpp $(sort $(dir $(CPP_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.cpp Makefile | $(BUILD_DIR)
-	@$(CPP) -c $(CPP_FLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.cpp=.lst)) $< -o $@
+	@$(CPP) -c $(CPP_FLAGS) $< -o $@
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	@$(CPP) $(OBJECTS) -o $@
@@ -78,13 +78,18 @@ $(BUILD_DIR):
 # Run
 #######################################
 run:
-	@./$(BUILD_DIR)/$(TARGET).elf
+	@./$(BUILD_DIR)/$(TARGET).elf ../tests/bin/program.bin
 
 #######################################
 # Clean up
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
+
+#######################################
+# Build and Run
+#######################################
+build_and_run: all run
 
 #######################################
 # Dependencies

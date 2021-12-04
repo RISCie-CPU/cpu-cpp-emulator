@@ -59,7 +59,7 @@ all: $(BUILD_DIR)/$(TARGET).elf
 
 
 #######################################
-# build the application
+# Build the application
 #######################################
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(CPP_SOURCES:.cpp=.o)))
@@ -75,18 +75,18 @@ $(BUILD_DIR):
 	mkdir $@
 
 #######################################
-# run
+# Run
 #######################################
 run:
 	@./$(BUILD_DIR)/$(TARGET).elf
 
 #######################################
-# clean up
+# Clean up
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
 
 #######################################
-# dependencies
+# Dependencies
 #######################################
 -include $(wildcard $(BUILD_DIR)/*.d)

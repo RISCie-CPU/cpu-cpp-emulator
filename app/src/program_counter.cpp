@@ -1,8 +1,9 @@
-#include<iostream>
-#include<fstream>
+#include <iostream>
+#include <fstream>
 #include "program_counter.h"
 
 
-ProgramCounter::ProgramCounter(){
+ProgramCounter::ProgramCounter()
+{
     current_address = 0;
 }

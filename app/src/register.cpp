@@ -1,8 +1,9 @@
-#include<iostream>
-#include<fstream>
+#include <iostream>
+#include <fstream>
 #include "register.h"
 
 
-Register::Register(){
+Register::Register()
+{
     stored_value = REG_INIT_VALUE;
 }

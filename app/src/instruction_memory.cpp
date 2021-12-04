@@ -125,8 +125,8 @@ DecodedInst::DecodedInst()
 
 void DecodedInst::print_info()
 {
-    std::cout << "\n--------------------------------------------\n";
-    std::cout << "Instruction: 0x" << std::hex << instruction << std::endl;
+    std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;;
+    // std::cout << "Instruction: 0x" << std::hex << instruction << std::endl;
     std::cout << "Type: " << type_words[my_type] << std::endl;
     if (opcode != UNUSED_VAL) std::cout << "Opcode: 0x" << std::hex << opcode << std::endl;
     // if (imm != UNUSED_VAL) std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
@@ -139,7 +139,7 @@ void DecodedInst::print_info()
     if (csr != UNUSED_VAL) std::cout << "csr: 0x" << std::hex << csr << std::endl;
     if (func7 != UNUSED_VAL) std::cout << "func7: 0x" << std::hex << func7 << std::endl;
     if (func3 != UNUSED_VAL) std::cout << "func3: 0x" << std::hex << func3 << std::endl;
-    std::cout << "--------------------------------------------\n";
+    // std::cout << "--------------------------------------------\n";
 }
 
 unsigned int DecodedInst::get_bits(int high_bit, int low_bit)

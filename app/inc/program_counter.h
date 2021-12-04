@@ -1,5 +1,4 @@
-#ifndef PINE_EMU_PC_H
-#define PINE_EMU_PC_H
+#pragma once
 
 #define UNUSED_VAL 4294967295
 
@@ -9,6 +8,3 @@ class ProgramCounter {
         ProgramCounter();
         int current_address;
 };
-
-
-#endif

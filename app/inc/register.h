@@ -1,5 +1,4 @@
-#ifndef PINE_EMU_REG_H
-#define PINE_EMU_REG_H
+#pragma once
 
 #define UNUSED_VAL 4294967295
 // Could be random in future if we want to simulate real-ish conditions
@@ -10,5 +9,3 @@ class Register {
         Register();
         int stored_value;
 };
-
-#endif

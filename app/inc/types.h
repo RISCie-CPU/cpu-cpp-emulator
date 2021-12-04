@@ -1,5 +1,4 @@
-#ifndef PINE_EMU_TYPES_H
-#define PINE_EMU_TYPES_H
+#pragma once
 
 #include <inttypes.h>
 
@@ -32,5 +31,3 @@ namespace Emulator {
     }
 
 }
-
-#endif

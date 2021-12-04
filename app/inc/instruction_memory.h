@@ -1,5 +1,4 @@
-#ifndef PINE_EMU_IM_H
-#define PINE_EMU_IM_H
+#pragma once
 
 #define UNUSED_VAL 4294967295
 
@@ -27,7 +26,7 @@ class DecodedInst{
         unsigned int imm;
         unsigned int func7;
         unsigned int func3;
-    private: 
+    private:
         // Numbered as 31,30,29,...,2,1,0
         // Returns an integer found by reading high_bit downto low_bit
         unsigned int get_bits(int high_bit, int low_bit);
@@ -49,14 +48,11 @@ class DecodedInst{
 
 class InstructionMemory {
     private:
-        DecodedInst* instruction_list;         
+        DecodedInst* instruction_list;
     public:
         InstructionMemory(char* file_name);
         unsigned int num_instructions;
-        
+
         DecodedInst get_decoded_inst();
         DecodedInst get_decoded_inst(unsigned int number);
 };
-
-
-#endif

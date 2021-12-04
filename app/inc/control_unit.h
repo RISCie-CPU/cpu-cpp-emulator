@@ -1,5 +1,4 @@
-#ifndef PINE_EMU_CU_H
-#define PINE_EMU_CU_H
+#pragma once
 
 #include "types.h"
 
@@ -15,6 +14,3 @@ class ControlUnit {
         void print_control_signals(Emulator::Types::control_lines_t control_lines_in);
 
 };
-
-
-#endif

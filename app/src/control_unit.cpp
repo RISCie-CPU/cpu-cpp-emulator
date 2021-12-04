@@ -1,13 +1,13 @@
 #include<iostream>
 #include<fstream>
-#include "../includes/control_unit.h"
+#include "control_unit.h"
 
 // ControlUnit::ControlUnit(struct control_linesx *control_lines_in){
 //     std::cout << control_linesx.ALU_SRC << std::endl;
 // }
 
 Emulator::Types::control_lines_t ControlUnit::update_control_signals(unsigned int opcode_in, Emulator::Types::control_lines_t control_lines_in){
-    
+
     switch(opcode_in){
         case 0x33:
             // add, sub, slr, sll, xor, or, sra, and

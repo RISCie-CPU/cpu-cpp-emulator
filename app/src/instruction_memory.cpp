@@ -1,4 +1,4 @@
-#include "../includes/instruction_memory.h"
+#include "instruction_memory.h"
 #include<iostream>
 #include<fstream>
 #include<cmath>
@@ -50,7 +50,7 @@ InstructionMemory::InstructionMemory(char* file_name) {
             is.read(buffer,4);
 
             // Converts signed char into unsigned int
-            // This could be optimized for readabilty I think it is a good choice 
+            // This could be optimized for readabilty I think it is a good choice
             for(int x=0; x<4;x++){
                 buffer_int[x] = (unsigned char)buffer[x];
             }
@@ -58,7 +58,7 @@ InstructionMemory::InstructionMemory(char* file_name) {
             //Converts little-endian data from char array to unsigned integer
             // 31            24  23            16  15             8   7             0
             // [X X X X X X X X] [X X X X X X X X] [X X X X X X X X] [X X X X X X X X]
-            //    buffer_int[0]     buffer_int[1]     buffer_int[2]    buffer_int[3]  
+            //    buffer_int[0]     buffer_int[1]     buffer_int[2]    buffer_int[3]
             current_instruction = (buffer_int[0]<<24) + (buffer_int[1]<<16) + (buffer_int[2]<<8) + (buffer_int[3]);
 
             instruction_list[i] = DecodedInst(current_instruction);
@@ -66,7 +66,7 @@ InstructionMemory::InstructionMemory(char* file_name) {
         //Buffers are no longer needed
         delete[] buffer;
         delete[] buffer_int;
-        
+
 
         if (is){
             std::cout << "all characters read successfully.\n";

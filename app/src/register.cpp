@@ -1,6 +1,6 @@
 #include<iostream>
 #include<fstream>
-#include "../includes/register.h"
+#include "register.h"
 
 
 Register::Register(){

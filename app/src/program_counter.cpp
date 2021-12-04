@@ -1,6 +1,6 @@
 #include<iostream>
 #include<fstream>
-#include "../includes/program_counter.h"
+#include "program_counter.h"
 
 
 ProgramCounter::ProgramCounter(){

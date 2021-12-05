@@ -1,7 +1,4 @@
 #include "instruction_memory.hpp"
-#include <iostream>
-#include <fstream>
-#include <cmath>
 
 const char *type_words[] = {
     "U_TYPE",
@@ -125,7 +122,8 @@ DecodedInst::DecodedInst()
 
 void DecodedInst::print_info()
 {
-    std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;;
+    std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;
+    ;
     // std::cout << "Instruction: 0x" << std::hex << instruction << std::endl;
     std::cout << "Type: " << type_words[my_type] << std::endl;
     if (opcode != Emulator::Consts::UNUSED_VAL) std::cout << "Opcode: 0x" << std::hex << opcode << std::endl;

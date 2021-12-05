@@ -22,19 +22,20 @@ int main(int argc, char *argv[])
 
     // Initialize BUS lanes to 0 (More will be added)
     BUS.IMM_TO_PC = 0;
-    BUS.PC_to_IM = 0;
+    BUS.PC_to_IM  = 0;
 
     // Initialize basic variables
-    int phase = 0;          // either 0 or 1
-    int clock = 0;          // either 0 or 1
+    int phase = 0; // either 0 or 1
+    int clock = 0; // either 0 or 1
 
     bool running = true;
 
     // Main loop; one loop cycle = one clock period, PHASE = 2*clock period
-    while (running){
+    while (running)
+    {
         /*
-        *       Clock is 0 for PHASE 0 or 1
-        */
+         *       Clock is 0 for PHASE 0 or 1
+         */
         clock = 0;
         std::cout << "\nPhase: " << phase << std::endl;
 
@@ -61,12 +62,12 @@ int main(int argc, char *argv[])
 
 
         /*
-        *       Clock is 1 for PHASE 0 or 1
-        */
+         *       Clock is 1 for PHASE 0 or 1
+         */
         clock = 1;
 
         // Update temporary registers:
-        if (phase == 0 && clock ==1)
+        if (phase == 0 && clock == 1)
         {
             // TR0: TODO
             // TR1: TODO

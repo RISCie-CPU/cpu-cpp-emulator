@@ -1,12 +1,9 @@
-#include <iostream>
-#include <fstream>
 #include "control_unit.hpp"
 
-// ControlUnit::ControlUnit(struct control_linesx *control_lines_in){
-//     std::cout << control_linesx.ALU_SRC << std::endl;
-// }
-
-Emulator::Types::control_lines_t ControlUnit::update_control_signals(unsigned int opcode_in, Emulator::Types::control_lines_t control_lines_in)
+Emulator::Types::control_lines_t ControlUnit::update_control_signals(
+    unsigned int                     opcode_in,
+    Emulator::Types::control_lines_t control_lines_in
+)
 {
     switch (opcode_in)
     {
@@ -160,7 +157,9 @@ Emulator::Types::control_lines_t ControlUnit::update_control_signals(unsigned in
     return control_lines_in;
 } // ControlUnit::update_control_signals
 
-void ControlUnit::print_control_signals(Emulator::Types::control_lines_t control_lines_in)
+void ControlUnit::print_control_signals(
+    Emulator::Types::control_lines_t control_lines_in
+)
 {
     // std::cout << "\n-------------------- Control signals --------------------\n";
     std::cout << "\nControl signals:" << std::endl;

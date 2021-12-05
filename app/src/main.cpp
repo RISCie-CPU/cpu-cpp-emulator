@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "types.h"
-#include "consts.h"
-#include "instruction_memory.h"
-#include "control_unit.h"
-#include "program_counter.h"
-#include "register.h"
+#include "types.hpp"
+#include "consts.hpp"
+#include "instruction_memory.hpp"
+#include "control_unit.hpp"
+#include "program_counter.hpp"
+#include "register.hpp"
 
 int main(int argc, char *argv[])
 {

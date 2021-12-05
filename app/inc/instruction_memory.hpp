@@ -1,6 +1,6 @@
 #pragma once
 
-#include "consts.h"
+#include "consts.hpp"
 
 enum inst_type { U_TYPE, J_TYPE, I_TYPE, B_TYPE, S_TYPE, R_TYPE, BREAK_TYPE };
 

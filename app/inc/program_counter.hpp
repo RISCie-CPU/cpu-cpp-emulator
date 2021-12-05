@@ -1,7 +1,7 @@
 #pragma once
 
-#include "types.h"
-#include "consts.h"
+#include "types.hpp"
+#include "consts.hpp"
 
 
 class ProgramCounter

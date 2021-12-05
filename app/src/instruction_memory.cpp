@@ -1,4 +1,4 @@
-#include "instruction_memory.h"
+#include "instruction_memory.hpp"
 #include <iostream>
 #include <fstream>
 #include <cmath>

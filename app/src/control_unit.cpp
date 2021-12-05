@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "control_unit.h"
+#include "control_unit.hpp"
 
 // ControlUnit::ControlUnit(struct control_linesx *control_lines_in){
 //     std::cout << control_linesx.ALU_SRC << std::endl;

@@ -1,15 +1,13 @@
 #pragma once
 
-#include <inttypes.h>
-
 namespace Emulator {
     namespace Types {
 
         struct BUSES_t {
-            int PC_to_IM;   // Program counter to Instruction Memory    
+            int PC_to_IM;   // Program counter to Instruction Memory
             int IMM_TO_PC;  // Immedite generator to Program Counter
             int WB;         // Writeback
-            int PC_TO_TR2;  // Program counter to Temporary register 2 
+            int PC_TO_TR2;  // Program counter to Temporary register 2
             int TR2_TO_MUX; // Temporary register 2 to multiplexer
         };
 

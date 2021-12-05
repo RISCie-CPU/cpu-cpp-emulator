@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "program_counter.h"
+#include "program_counter.hpp"
 
 
 ProgramCounter::ProgramCounter()
@@ -10,11 +10,11 @@ ProgramCounter::ProgramCounter()
 
 Emulator::Types::BUSES_t ProgramCounter::update_BUS(Emulator::Types::BUSES_t BUS_in, Emulator::Types::control_lines_t control_lines_in, int phase_in, int clock_in){
     logic_wire_0 = ((control_lines_in.AUIPC & (phase_in==0)) | (!control_lines_in.AUIPC & (phase_in==1)));
-    
+
     SRC0 = control_lines_in.PC_SRC_0 & logic_wire_0;
     SRC1 = control_lines_in.PC_SRC_1 & logic_wire_0;
     mode = (!control_lines_in.TAKE_BRANCH & SRC0) | (control_lines_in.BRANCH & control_lines_in.TAKE_BRANCH);
-    
+
     int output_address;
 
     // Program counter + 4

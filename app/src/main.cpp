@@ -6,6 +6,7 @@
 #include "control_unit.hpp"
 #include "program_counter.hpp"
 #include "register.hpp"
+#include "ALU_SH.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +20,7 @@ int main(int argc, char *argv[])
     Register TR0;
     Register TR1;
     Register TR2;
+    ALU_SH ALU;
 
     // Initialize BUS lanes to 0 (More will be added)
     BUS.IMM_TO_PC = 0;
@@ -45,6 +47,9 @@ int main(int argc, char *argv[])
         DecodedInst current_inst = Rom.get_decoded_inst(current_address >> 2);
         current_inst.print_info();
 
+        // Send Immediate to Writeback
+        if (control_lines.IMM_TO_WB == 1) { BUS.WB = current_inst.imm; }
+
         // Stop when the instruciton jumps to itself (Had to put it here and not at the end bcs segmentation fault when it tried to read non existing instruction)
         if (current_inst.instruction == Emulator::Consts::END_INSTRUCTION)
         {
@@ -60,6 +65,11 @@ int main(int argc, char *argv[])
         // Update program counter, in PHASE 1 it will load new value. Needs to be last
         BUS = Program_counter.update_BUS(BUS, control_lines, phase, clock);
 
+        // Register file:
+
+        // Updates the ALU
+        ALU.update(&BUS, &control_lines);
+        
 
         /*
          *       Clock is 1 for PHASE 0 or 1
@@ -73,6 +83,12 @@ int main(int argc, char *argv[])
             // TR1: TODO
             BUS.TR2_TO_MUX = TR2.update(BUS.PC_TO_TR2);
         }
+
+        // Updates the ALU again
+        ALU.update(&BUS, &control_lines);
+
+        // Send ALU output to Writeback
+        if (control_lines.ALU_TO_WB == 1) { BUS.WB = BUS.ALU_TO_DM; }
 
         // Change phases (from 0 to 1, from 1 to 0)
         phase = (phase + 1) % 2;

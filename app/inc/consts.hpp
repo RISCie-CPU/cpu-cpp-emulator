@@ -4,6 +4,7 @@
 
 namespace Emulator {
 namespace Consts {
+// Unused values
 const uint32_t UNUSED_VAL = 0xFFFFFFFF;
 // Could be random in future if we want to simulate real-ish conditions
 const uint32_t REG_INIT_VALUE = 0;

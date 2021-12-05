@@ -1,6 +1,10 @@
 #pragma once
 
-#define UNUSED_VAL 4294967295
+#include <iostream>
+#include <fstream>
+#include <cmath>
+
+#include "consts.hpp"
 
 enum inst_type { U_TYPE, J_TYPE, I_TYPE, B_TYPE, S_TYPE, R_TYPE, BREAK_TYPE };
 

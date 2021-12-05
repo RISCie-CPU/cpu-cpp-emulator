@@ -1,12 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include "control_unit.h"
+#include "control_unit.hpp"
 
-// ControlUnit::ControlUnit(struct control_linesx *control_lines_in){
-//     std::cout << control_linesx.ALU_SRC << std::endl;
-// }
-
-Emulator::Types::control_lines_t ControlUnit::update_control_signals(unsigned int opcode_in, Emulator::Types::control_lines_t control_lines_in)
+Emulator::Types::control_lines_t ControlUnit::update_control_signals(
+    unsigned int                     opcode_in,
+    Emulator::Types::control_lines_t control_lines_in
+)
 {
     switch (opcode_in)
     {
@@ -160,22 +157,25 @@ Emulator::Types::control_lines_t ControlUnit::update_control_signals(unsigned in
     return control_lines_in;
 } // ControlUnit::update_control_signals
 
-void ControlUnit::print_control_signals(Emulator::Types::control_lines_t control_lines_in)
+void ControlUnit::print_control_signals(
+    Emulator::Types::control_lines_t control_lines_in
+)
 {
-    std::cout << "\n-------------------- Control signals --------------------\n";
-    if (control_lines_in.ALU_SRC == 1) std::cout << "ALU_SRC, ";
-    if (control_lines_in.ALU_TO_WB == 1) std::cout << "ALU_TO_WB, ";
-    if (control_lines_in.AUIPC == 1) std::cout << "ALU_TO_AUIPC, ";
-    if (control_lines_in.IMM_GEN_CTR_0 == 1) std::cout << "IMM_GEN_CTR_0, ";
-    if (control_lines_in.IMM_GEN_CTR_1 == 1) std::cout << "IMM_GEN_CTR_1, ";
-    if (control_lines_in.IMM_GEN_CTR_2 == 1) std::cout << "IMM_GEN_CTR_2, ";
-    if (control_lines_in.IMM_TO_WB == 1) std::cout << "IMM_TO_WB, ";
-    if (control_lines_in.PC_SRC_0 == 1) std::cout << "PC_SRC_0, ";
-    if (control_lines_in.PC_SRC_1 == 1) std::cout << "PC_SRC_1, ";
-    if (control_lines_in.RAM_TO_WB == 1) std::cout << "RAM_TO_WB, ";
-    if (control_lines_in.STR_TO_RAM == 1) std::cout << "STR_TO_RAM, ";
-    if (control_lines_in.STR_TO_RF == 1) std::cout << "STR_TO_RF, ";
-    if (control_lines_in.TAKE_BRANCH == 1) std::cout << "TAKE_BRANCH, ";
+    // std::cout << "\n-------------------- Control signals --------------------\n";
+    std::cout << "\nControl signals:" << std::endl;
+    if (control_lines_in.ALU_SRC == 1) std::cout << "ALU_SRC ";
+    if (control_lines_in.ALU_TO_WB == 1) std::cout << "ALU_TO_WB ";
+    if (control_lines_in.AUIPC == 1) std::cout << "ALU_TO_AUIPC ";
+    if (control_lines_in.IMM_GEN_CTR_0 == 1) std::cout << "IMM_GEN_CTR_0 ";
+    if (control_lines_in.IMM_GEN_CTR_1 == 1) std::cout << "IMM_GEN_CTR_1 ";
+    if (control_lines_in.IMM_GEN_CTR_2 == 1) std::cout << "IMM_GEN_CTR_2 ";
+    if (control_lines_in.IMM_TO_WB == 1) std::cout << "IMM_TO_WB ";
+    if (control_lines_in.PC_SRC_0 == 1) std::cout << "PC_SRC_0 ";
+    if (control_lines_in.PC_SRC_1 == 1) std::cout << "PC_SRC_1 ";
+    if (control_lines_in.RAM_TO_WB == 1) std::cout << "RAM_TO_WB ";
+    if (control_lines_in.STR_TO_RAM == 1) std::cout << "STR_TO_RAM ";
+    if (control_lines_in.STR_TO_RF == 1) std::cout << "STR_TO_RF ";
+    if (control_lines_in.TAKE_BRANCH == 1) std::cout << "TAKE_BRANCH ";
     // std::count << std::endl;
     std::cout << "\n---------------------------------------------------------\n";
 }

@@ -1,13 +1,11 @@
 #include <iostream>
 
-#include "types.h"
-#include "instruction_memory.h"
-#include "control_unit.h"
-#include "program_counter.h"
-#include "register.h"
-
-#define UNUSED_VAL      4294967295
-#define END_INSTRUCTION 0 // Placeholder for instruction that jumps to itself
+#include "types.hpp"
+#include "consts.hpp"
+#include "instruction_memory.hpp"
+#include "control_unit.hpp"
+#include "program_counter.hpp"
+#include "register.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -24,19 +22,20 @@ int main(int argc, char *argv[])
 
     // Initialize BUS lanes to 0 (More will be added)
     BUS.IMM_TO_PC = 0;
-    BUS.PC_to_IM = 0;
+    BUS.PC_to_IM  = 0;
 
     // Initialize basic variables
-    int phase = 0;          // either 0 or 1
-    int clock = 0;          // either 0 or 1
+    int phase = 0; // either 0 or 1
+    int clock = 0; // either 0 or 1
 
     bool running = true;
 
     // Main loop; one loop cycle = one clock period, PHASE = 2*clock period
-    while (running){
+    while (running)
+    {
         /*
-        *       Clock is 0 for PHASE 0 or 1
-        */
+         *       Clock is 0 for PHASE 0 or 1
+         */
         clock = 0;
         std::cout << "\nPhase: " << phase << std::endl;
 
@@ -47,7 +46,7 @@ int main(int argc, char *argv[])
         current_inst.print_info();
 
         // Stop when the instruciton jumps to itself (Had to put it here and not at the end bcs segmentation fault when it tried to read non existing instruction)
-        if (current_inst.instruction == END_INSTRUCTION)
+        if (current_inst.instruction == Emulator::Consts::END_INSTRUCTION)
         {
             running = false;
             std::cout << "\nEnd of program." << std::endl;
@@ -63,12 +62,12 @@ int main(int argc, char *argv[])
 
 
         /*
-        *       Clock is 1 for PHASE 0 or 1
-        */
+         *       Clock is 1 for PHASE 0 or 1
+         */
         clock = 1;
 
         // Update temporary registers:
-        if (phase == 0 && clock ==1)
+        if (phase == 0 && clock == 1)
         {
             // TR0: TODO
             // TR1: TODO

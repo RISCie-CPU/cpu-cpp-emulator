@@ -1,7 +1,4 @@
-#include "instruction_memory.h"
-#include <iostream>
-#include <fstream>
-#include <cmath>
+#include "instruction_memory.hpp"
 
 const char *type_words[] = {
     "U_TYPE",
@@ -96,14 +93,14 @@ DecodedInst InstructionMemory::get_decoded_inst(unsigned int number)
 DecodedInst::DecodedInst(unsigned int instruction_in)
 {
     my_type     = BREAK_TYPE;
-    rs1         = UNUSED_VAL;
-    rs2         = UNUSED_VAL;
-    rd          = UNUSED_VAL;
-    csr         = UNUSED_VAL;
-    opcode      = UNUSED_VAL;
-    imm         = UNUSED_VAL;
-    func7       = UNUSED_VAL;
-    func3       = UNUSED_VAL;
+    rs1         = Emulator::Consts::UNUSED_VAL;
+    rs2         = Emulator::Consts::UNUSED_VAL;
+    rd          = Emulator::Consts::UNUSED_VAL;
+    csr         = Emulator::Consts::UNUSED_VAL;
+    opcode      = Emulator::Consts::UNUSED_VAL;
+    imm         = Emulator::Consts::UNUSED_VAL;
+    func7       = Emulator::Consts::UNUSED_VAL;
+    func3       = Emulator::Consts::UNUSED_VAL;
     instruction = instruction_in;
 
     process_inst();
@@ -112,33 +109,34 @@ DecodedInst::DecodedInst(unsigned int instruction_in)
 DecodedInst::DecodedInst()
 {
     my_type     = BREAK_TYPE;
-    rs1         = UNUSED_VAL;
-    rs2         = UNUSED_VAL;
-    rd          = UNUSED_VAL;
-    csr         = UNUSED_VAL;
-    opcode      = UNUSED_VAL;
-    imm         = UNUSED_VAL;
-    func7       = UNUSED_VAL;
-    func3       = UNUSED_VAL;
-    instruction = UNUSED_VAL;
+    rs1         = Emulator::Consts::UNUSED_VAL;
+    rs2         = Emulator::Consts::UNUSED_VAL;
+    rd          = Emulator::Consts::UNUSED_VAL;
+    csr         = Emulator::Consts::UNUSED_VAL;
+    opcode      = Emulator::Consts::UNUSED_VAL;
+    imm         = Emulator::Consts::UNUSED_VAL;
+    func7       = Emulator::Consts::UNUSED_VAL;
+    func3       = Emulator::Consts::UNUSED_VAL;
+    instruction = Emulator::Consts::UNUSED_VAL;
 }
 
 void DecodedInst::print_info()
 {
-    std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;;
+    std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;
+    ;
     // std::cout << "Instruction: 0x" << std::hex << instruction << std::endl;
     std::cout << "Type: " << type_words[my_type] << std::endl;
-    if (opcode != UNUSED_VAL) std::cout << "Opcode: 0x" << std::hex << opcode << std::endl;
-    // if (imm != UNUSED_VAL) std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
+    if (opcode != Emulator::Consts::UNUSED_VAL) std::cout << "Opcode: 0x" << std::hex << opcode << std::endl;
+    // if (imm != Emulator::Consts::UNUSED_VAL) std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
     // Immediate can be -1 (=UNUSED_VAL) so the if statement is not useful here
     std::cout << "Imm: 0x" << std::hex << imm << std::endl;
-    // if (imm != UNUSED_VAL) std::cout << "Imm = " << std::bitset<32>(imm)  << std::endl;
-    if (rs1 != UNUSED_VAL) std::cout << "rs1: 0x" << std::hex << rs1 << std::endl;
-    if (rs2 != UNUSED_VAL) std::cout << "rs2: 0x" << std::hex << rs2 << std::endl;
-    if (rd != UNUSED_VAL) std::cout << "rd: 0x" << std::hex << rd << std::endl;
-    if (csr != UNUSED_VAL) std::cout << "csr: 0x" << std::hex << csr << std::endl;
-    if (func7 != UNUSED_VAL) std::cout << "func7: 0x" << std::hex << func7 << std::endl;
-    if (func3 != UNUSED_VAL) std::cout << "func3: 0x" << std::hex << func3 << std::endl;
+    // if (imm != Emulator::Consts::UNUSED_VAL) std::cout << "Imm = " << std::bitset<32>(imm)  << std::endl;
+    if (rs1 != Emulator::Consts::UNUSED_VAL) std::cout << "rs1: 0x" << std::hex << rs1 << std::endl;
+    if (rs2 != Emulator::Consts::UNUSED_VAL) std::cout << "rs2: 0x" << std::hex << rs2 << std::endl;
+    if (rd != Emulator::Consts::UNUSED_VAL) std::cout << "rd: 0x" << std::hex << rd << std::endl;
+    if (csr != Emulator::Consts::UNUSED_VAL) std::cout << "csr: 0x" << std::hex << csr << std::endl;
+    if (func7 != Emulator::Consts::UNUSED_VAL) std::cout << "func7: 0x" << std::hex << func7 << std::endl;
+    if (func3 != Emulator::Consts::UNUSED_VAL) std::cout << "func3: 0x" << std::hex << func3 << std::endl;
     // std::cout << "--------------------------------------------\n";
 }
 

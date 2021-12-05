@@ -1,8 +1,7 @@
 #pragma once
 
 #include "types.h"
-
-#define UNUSED_VAL 4294967295
+#include "consts.h"
 
 
 class ProgramCounter

@@ -1,13 +1,11 @@
 #include <iostream>
 
 #include "types.h"
+#include "consts.h"
 #include "instruction_memory.h"
 #include "control_unit.h"
 #include "program_counter.h"
 #include "register.h"
-
-#define UNUSED_VAL      4294967295
-#define END_INSTRUCTION 0 // Placeholder for instruction that jumps to itself
 
 int main(int argc, char *argv[])
 {
@@ -47,7 +45,7 @@ int main(int argc, char *argv[])
         current_inst.print_info();
 
         // Stop when the instruciton jumps to itself (Had to put it here and not at the end bcs segmentation fault when it tried to read non existing instruction)
-        if (current_inst.instruction == END_INSTRUCTION)
+        if (current_inst.instruction == Emulator::Consts::END_INSTRUCTION)
         {
             running = false;
             std::cout << "\nEnd of program." << std::endl;

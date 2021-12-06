@@ -6,6 +6,7 @@
 #include "control_unit.hpp"
 #include "program_counter.hpp"
 #include "register.hpp"
+#include "register_file.hpp"
 #include "ALU_SH.hpp"
 
 int main(int argc, char *argv[])
@@ -21,6 +22,9 @@ int main(int argc, char *argv[])
     Register TR1;
     Register TR2;
     ALU_SH ALU;
+
+    RegisterFile delete_just_a_test;
+    delete_just_a_test.Test();
 
     // Initialize BUS lanes to 0 (More will be added)
     BUS.IMM_TO_PC = 0;
@@ -46,9 +50,13 @@ int main(int argc, char *argv[])
         // Get current instruction and print its properties
         DecodedInst current_inst = Rom.get_decoded_inst(current_address >> 2);
         current_inst.print_info();
-
+      
         // Send Immediate to Writeback
         if (control_lines.IMM_TO_WB == 1) { BUS.WB = current_inst.imm; }
+        
+        //Test Register File with a read and write
+        delete_just_a_test.write(BUS, current_inst.rd);
+        delete_just_a_test.read(BUS, current_inst.rs1,current_inst.rs2);
 
         // Stop when the instruciton jumps to itself (Had to put it here and not at the end bcs segmentation fault when it tried to read non existing instruction)
         if (current_inst.instruction == Emulator::Consts::END_INSTRUCTION)
@@ -93,4 +101,5 @@ int main(int argc, char *argv[])
         // Change phases (from 0 to 1, from 1 to 0)
         phase = (phase + 1) % 2;
     }
+    delete_just_a_test.Test();
 } // main

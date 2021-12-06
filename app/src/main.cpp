@@ -7,6 +7,7 @@
 #include "program_counter.hpp"
 #include "register.hpp"
 #include "register_file.hpp"
+#include "ALU_SH.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
     Register TR0;
     Register TR1;
     Register TR2;
+    ALU_SH ALU;
 
     RegisterFile delete_just_a_test;
     delete_just_a_test.Test();
@@ -48,7 +50,11 @@ int main(int argc, char *argv[])
         // Get current instruction and print its properties
         DecodedInst current_inst = Rom.get_decoded_inst(current_address >> 2);
         current_inst.print_info();
-
+      
+        // Send Immediate to Writeback
+        if (control_lines.IMM_TO_WB == 1) { BUS.WB = current_inst.imm; }
+        
+        //Test Register File with a read and write
         delete_just_a_test.write(BUS, current_inst.rd);
         delete_just_a_test.read(BUS, current_inst.rs1,current_inst.rs2);
 
@@ -67,6 +73,11 @@ int main(int argc, char *argv[])
         // Update program counter, in PHASE 1 it will load new value. Needs to be last
         BUS = Program_counter.update_BUS(BUS, control_lines, phase, clock);
 
+        // Register file:
+
+        // Updates the ALU
+        ALU.update(&BUS, &control_lines);
+        
 
         /*
          *       Clock is 1 for PHASE 0 or 1
@@ -80,6 +91,12 @@ int main(int argc, char *argv[])
             // TR1: TODO
             BUS.TR2_TO_MUX = TR2.update(BUS.PC_TO_TR2);
         }
+
+        // Updates the ALU again
+        ALU.update(&BUS, &control_lines);
+
+        // Send ALU output to Writeback
+        if (control_lines.ALU_TO_WB == 1) { BUS.WB = BUS.ALU_TO_DM; }
 
         // Change phases (from 0 to 1, from 1 to 0)
         phase = (phase + 1) % 2;

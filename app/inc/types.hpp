@@ -6,11 +6,14 @@
 namespace Emulator {
 namespace Types {
 struct BUSES_t {
-    int PC_to_IM;   // Program counter to Instruction Memory
-    int IMM_TO_PC;  // Immedite generator to Program Counter
-    int WB;         // Writeback
-    int PC_TO_TR2;  // Program counter to Temporary register 2
-    int TR2_TO_MUX; // Temporary register 2 to multiplexer
+    int PC_to_IM;       // Program counter to Instruction Memory
+    int IMM_TO_PC;      // Immedite generator to Program Counter
+    int WB;             // Writeback
+    int PC_TO_TR2;      // Program counter to Temporary register 2
+    int TR2_TO_MUX;     // Temporary register 2 to multiplexer
+    int TR0_TO_ALU0;    // Temporary register 0 to ALU input 0
+    int MUX_TO_ALU1;    // Multiplexer output to ALU input 1
+    int ALU_TO_DM;      // ALU to Data memory
 };
 
 struct control_lines_t {
@@ -30,6 +33,9 @@ struct control_lines_t {
     bool TAKE_BRANCH;
     // By ALU:
     bool BRANCH;
+    int funct3;
+    bool i;
+
 };
 }
 }

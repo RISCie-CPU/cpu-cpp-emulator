@@ -11,6 +11,8 @@ struct BUSES_t {
     int WB;         // Writeback
     int PC_TO_TR2;  // Program counter to Temporary register 2
     int TR2_TO_MUX; // Temporary register 2 to multiplexer
+    int RF0_TO_TR0; // Register File 0 to ??
+    int RF1_TO_TR1; // Register File 1 to ??
 };
 
 struct control_lines_t {

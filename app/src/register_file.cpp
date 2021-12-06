@@ -18,5 +18,5 @@ void RegisterFile::write(Emulator::Types::BUSES_t &BUS_in,int rd){
 
 void RegisterFile::read(Emulator::Types::BUSES_t &BUS_in,int rs1, int rs2){
     BUS_in.RF0_TO_TR0 = register_array[rs1].stored_value;
-    BUS_in.RF0_TO_TR0 = register_array[rs2].stored_value;
+    BUS_in.RF1_TO_TR1 = register_array[rs2].stored_value;
 }

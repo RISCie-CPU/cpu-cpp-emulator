@@ -176,6 +176,6 @@ void ControlUnit::print_control_signals(
     if (control_lines_in.STR_TO_RAM == 1) std::cout << "STR_TO_RAM ";
     if (control_lines_in.STR_TO_RF == 1) std::cout << "STR_TO_RF ";
     if (control_lines_in.TAKE_BRANCH == 1) std::cout << "TAKE_BRANCH ";
-    // std::count << std::endl;
-    std::cout << "\n---------------------------------------------------------\n";
+    std::cout << "\n";
+    // std::cout << "\n---------------------------------------------------------\n";
 }

@@ -26,6 +26,10 @@ Emulator::Types::BUSES_t ProgramCounter::update_BUS(
     if (mode == 1) output_address = current_address + BUS_in.IMM_TO_PC;
     if (SRC1 == 0) BUS_in.PC_TO_TR2 = output_address;
     if (SRC1 == 1) BUS_in.PC_TO_TR2 = BUS_in.WB;
+    // std::cout << "To TR0: 0x" << std::hex << BUS_in.PC_TO_TR2 << std::endl;;
+    if (SRC1 == 0) BUS_in.PC_TO_TR2 = output_address;
+    if (SRC1 == 1) BUS_in.PC_TO_TR2 = BUS_in.WB;
+
     // Store new value on falling edge of CLK1
     if (clock_in == 0 && phase_in == 1)
     {
@@ -38,8 +42,6 @@ Emulator::Types::BUSES_t ProgramCounter::update_BUS(
         if (mode == 0) output_address = current_address + 4;
         // Program counter + Immediate value
         if (mode == 1) output_address = current_address + BUS_in.IMM_TO_PC;
-        if (SRC1 == 0) BUS_in.PC_TO_TR2 = output_address;
-        if (SRC1 == 1) BUS_in.PC_TO_TR2 = BUS_in.WB;
     }
 
     return BUS_in;

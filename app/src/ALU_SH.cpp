@@ -33,22 +33,34 @@ ALU_SH::ALU_SH(){
 
 }
 
-void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_lines_t *control_lines_in){
+void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_lines_t &control_lines_in){
     int operand_x = (*BUS_in).TR0_TO_ALU0;   
-    int operand_y = (*BUS_in).MUX_TO_ALU1;
-    int funct3 = (*control_lines_in).funct3;
+    int operand_y = (*BUS_in).ALU_MUX_TO_ALU1;
+    int funct3 = control_lines_in.funct3;
     // int funct3 = 0;
-    bool i = (*control_lines_in).i;
-    bool mode = (*control_lines_in).TAKE_BRANCH;
+    bool i = control_lines_in.i;
+    bool mode = control_lines_in.TAKE_BRANCH;
     
-    bool alu_op_0 = !((*control_lines_in).STR_TO_RAM | (*control_lines_in).RAM_TO_WB);
-    bool alu_op_1 = !((*control_lines_in).ALU_SRC);
+    bool alu_op_0 = !(control_lines_in.STR_TO_RAM | control_lines_in.RAM_TO_WB);
+    bool alu_op_1 = !(control_lines_in.ALU_SRC);
 
     int temp_output;
     bool temp_branch;
 
     if (alu_op_0 == 0) { funct3 = 0; }
     if (alu_op_1 == 0) { i = 0; }
+
+    // std::cout << " ---- ALU ----" <<std::endl;
+    // std::cout << "X: 0x" << std::hex << (*BUS_in).TR0_TO_ALU0 << std::endl;
+    // std::cout << "Y: 0x" << std::hex << (*BUS_in).ALU_MUX_TO_ALU1 << std::endl;
+    // std::cout << "funct3: 0x" << std::hex << funct3 << std::endl;
+    // std::cout << "i: 0x" << std::hex << i << std::endl;
+    // std::cout << "mode: 0x" << std::hex << mode << std::endl;
+    // std::cout << "ALU OP 0: 0x" << std::hex << alu_op_0 << std::endl;
+    // std::cout << "ALU OP 1: 0x" << std::hex << alu_op_1 << std::endl;
+
+
+
 
     if (funct3 == 0b000)
     {
@@ -105,14 +117,14 @@ void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_l
     // WARNING: do not merge control_lines_in.funct3 and func3! they are different for alu and shifter. Same with i.
 
     // sll
-    if ((*control_lines_in).funct3 == 0b001)
+    if (control_lines_in.funct3 == 0b001)
     {
         temp_output = (unsigned int)operand_x << ((unsigned int)operand_y & 0b11111);
     }
-    else if ((*control_lines_in).funct3 == 0b101)
+    else if (control_lines_in.funct3 == 0b101)
     {
         // srl
-        if ((*control_lines_in).i == 0)
+        if (control_lines_in.i == 0)
         {
             temp_output = (unsigned int)operand_x >> ((unsigned int)operand_y & 0b11111);
         }
@@ -128,11 +140,11 @@ void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_l
     if (mode == 0){     // Normal ALU operation
         // std::cout << "ALU output: " << std::hex << temp_output << std::endl;
         (*BUS_in).ALU_TO_DM = temp_output;
-        (*control_lines_in).BRANCH = 0;
+        control_lines_in.BRANCH = 0;
     }
     else{               // Calculating if condition is true or not for conditional jump
         // std::cout << "Branch bit: " << temp_branch << std::endl;
         (*BUS_in).ALU_TO_DM = 0;
-        (*control_lines_in).BRANCH = temp_branch;
+        control_lines_in.BRANCH = temp_branch;
     }
 }

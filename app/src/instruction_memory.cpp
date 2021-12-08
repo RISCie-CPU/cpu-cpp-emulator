@@ -122,9 +122,9 @@ DecodedInst::DecodedInst()
 
 void DecodedInst::print_info()
 {
-    std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;
+    // std::cout << "\n--------------- " << "Instruction: 0x" << std::hex << instruction << " ---------------" << std::endl;
     ;
-    // std::cout << "Instruction: 0x" << std::hex << instruction << std::endl;
+    std::cout << "Instruction: 0x" << std::hex << instruction << std::endl;
     std::cout << "Type: " << type_words[my_type] << std::endl;
     if (opcode != Emulator::Consts::UNUSED_VAL) std::cout << "Opcode: 0x" << std::hex << opcode << std::endl;
     // if (imm != Emulator::Consts::UNUSED_VAL) std::cout<<"Imm: 0x"<<std::hex<<imm<<std::endl;
@@ -152,12 +152,14 @@ unsigned int DecodedInst::get_bits(int high_bit, int low_bit)
     return (instruction & mask) >> low_bit;
 }
 
+// 0, 12
 signed int DecodedInst::sign_extend(signed int data, int data_lenght)
 {
+    // 32-12 = 20
     int remaining_bits = 32 - data_lenght;
     int mask = pow(2, data_lenght) - 1;
 
-    signed int sign_extended_data = (get_bits(31, 20) & mask) << remaining_bits;
+    signed int sign_extended_data = (data & mask) << remaining_bits;
     sign_extended_data >>= remaining_bits;
 
     return sign_extended_data;
@@ -173,7 +175,7 @@ bool DecodedInst::process_inst()
 {
     // Grab obcode from bit 6 downto 0
     opcode = get_bits(6, 0);
-
+    
     // F: Sign extend using intiger size property
 
     // Instruction Encoding depends on the instruction type.
@@ -207,6 +209,7 @@ bool DecodedInst::process_inst()
             break;
         }
         case 0x23:
+        {
             // sb, sh, sw
             my_type = S_TYPE;
             // Double Check this logic
@@ -215,6 +218,7 @@ bool DecodedInst::process_inst()
             rs1   = get_bits(19, 15);
             func3 = get_bits(14, 12);
             break;
+        }
         case 0x63:
         {
             // beq, bne, blt, bge, bltu, bgeu

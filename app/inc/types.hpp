@@ -14,6 +14,8 @@ struct BUSES_t {
     int TR0_TO_ALU0;    // Temporary register 0 to ALU input 0
     int MUX_TO_ALU1;    // Multiplexer output to ALU input 1
     int ALU_TO_DM;      // ALU to Data memory
+    int RF0_TO_TR0;     //Register File 0 to temporary Register 0
+    int RF1_TO_TR1;     // Register File 1 to temporary Register 1
 };
 
 struct control_lines_t {

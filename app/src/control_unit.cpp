@@ -162,7 +162,7 @@ void ControlUnit::print_control_signals(
 )
 {
     // std::cout << "\n-------------------- Control signals --------------------\n";
-    std::cout << "\nControl signals:" << std::endl;
+    std::cout << "\nControl signals: ";
     if (control_lines_in.ALU_SRC == 1) std::cout << "ALU_SRC ";
     if (control_lines_in.ALU_TO_WB == 1) std::cout << "ALU_TO_WB ";
     if (control_lines_in.AUIPC == 1) std::cout << "ALU_TO_AUIPC ";

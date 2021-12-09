@@ -80,8 +80,8 @@ int main(int argc, char *argv[])
             BUS.TR2_TO_MUX = TR2.update(BUS.PC_TO_TR2);
 
 
-            std::cout << "TR0: 0x" << std::hex << BUS.TR0_TO_ALU0 << std::endl;
-            std::cout << "TR1: 0x" << std::hex << BUS.TR1_TO_RAMD << std::endl;
+            std::cout << "TR0: 0x" << std::hex << BUS.TR0_TO_ALU0 << "\t";
+            std::cout << "TR1: 0x" << std::hex << BUS.TR1_TO_RAMD << "\t";
             std::cout << "TR2: 0x" << std::hex << BUS.TR2_TO_MUX << std::endl;
 
 

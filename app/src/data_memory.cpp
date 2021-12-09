@@ -39,6 +39,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         {
             addr = addr % 524288;  // 2 ** 19
             output = sign_extend(ram[addr], 8);
+            std::cout << "Data memory: lb, 0x" << std::hex << output << " to WB (from: 0x" << std::hex << addr << ")" << std::endl;
         }
         // VRAM
 
@@ -54,6 +55,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
             output = ram[addr + 0];
             output |= ram[addr + 1] << 8;
             output = sign_extend(output, 16);
+            std::cout << "Data memory: lh, 0x" << std::hex << output << " to WB (from: 0x" << std::hex << addr << ")" << std::endl;
         }
         // VRAM
 
@@ -69,6 +71,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
             output |= ram[addr + 1] << 8;
             output |= ram[addr + 2] << 24;
             output |= ram[addr + 3] << 16;
+            std::cout << "Data memory: lw, 0x" << std::hex << output << " to WB (from: 0x" << std::hex << addr << ")" << std::endl;
         }
         // VRAM
 
@@ -82,7 +85,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         {
             addr = addr % 524288;  // 2 ** 19
             output = sign_extend(ram[addr], 8);
-            std::cout << "Načítání bytu TADY: " << (int)ram[addr] << std::endl;
+            std::cout << "Data memory: lbu, 0x" << std::hex << output << " to WB (from: 0x" << std::hex << addr << ")" << std::endl;
         }
         // VRAM
 
@@ -97,6 +100,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
             addr = addr % 524288;  // 2 ** 19
             output = ram[addr + 0];
             output |= ram[addr + 1] << 8;
+            std::cout << "Data memory: lhu, 0x" << std::hex << output << " to WB (from: 0x" << std::hex << addr << ")" << std::endl;
         }
         // VRAM
 
@@ -104,7 +108,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
     }
 
     (*BUS_in).WB = output;
-    std::cout << "Loaded: 0x" << std::hex << output << std::endl;
+    // std::cout << "Data memory: 0x" << std::hex << output << " to WB" << std::endl;
 }
 
 void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emulator::Types::BUSES_t *BUS_in)
@@ -113,8 +117,8 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
     int addr = (*BUS_in).ALU_TO_DM;
     unsigned int funct3 = (*control_lines_in).funct3;
 
-    std::cout << "Addr: 0x" << std::hex << addr << std::endl;
-    std::cout << "Storing: 0x" << std::hex << to_store << std::endl;
+    // std::cout << "Addr: 0x" << std::hex << addr << std::endl;
+    // std::cout << "Storing: 0x" << std::hex << to_store << std::endl;
 
     // By bytes (sb):
     if (funct3 == 0b000)
@@ -122,7 +126,7 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
         // SRAM
         if (addr >> 30 == 0)
         {
-            std::cout << "Storing a byte" << std::endl;
+            std::cout << "Data memory: sb, 0x" << std::hex << to_store << " --> [0x" << std::hex << addr << "]" << std::endl;
             addr = addr % 524288;  // 2 ** 19
             ram[addr] = to_store & 0xff;
         }
@@ -136,7 +140,7 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
         // SRAM
         if (addr >> 30 == 0)
         {
-            std::cout << "Storing a half" << std::endl;
+            std::cout << "Data memory: sh, 0x" << std::hex << to_store << " --> [0x" << std::hex << addr << "]" << std::endl;
             addr = addr % 524288;  // 2 ** 19
             ram[addr + 0] = (to_store & 0x00ff) >> 0;
             ram[addr + 1] = (to_store & 0xff00) >> 8;
@@ -151,7 +155,7 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
         // SRAM
         if (addr >> 30 == 0)
         {
-            std::cout << "Storing a word" << std::endl;
+            std::cout << "Data memory: sw, 0x" << std::hex << to_store << " --> [0x" << std::hex << addr << "]" << std::endl;
             addr = addr % 524288;  // 2 ** 19
             ram[addr + 0] = (to_store & 0x000000ff) >> 0;
             ram[addr + 1] = (to_store & 0x0000ff00) >> 8;

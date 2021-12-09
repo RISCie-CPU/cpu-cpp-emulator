@@ -16,7 +16,7 @@ void RegisterFile::Test(){
 void RegisterFile::write(Emulator::Types::BUSES_t &BUS_in,int rd){
     if (rd != 0){
         register_array[rd].update(BUS_in.WB_TO_RF);
-        std::cout<<"REG: Writing "<< std::hex<<BUS_in.WB_TO_RF << " to " << rd <<std::endl;
+        std::cout<<"Register File: Writing 0x"<< std::hex<<BUS_in.WB_TO_RF << " --> [0x" << std::hex << rd << "]" << std::endl;
 
     }
     if (rd == 1)

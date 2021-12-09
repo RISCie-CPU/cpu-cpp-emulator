@@ -30,7 +30,6 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
     int output;
     int addr = (*BUS_in).ALU_TO_DM;
     unsigned int funct3 = (*control_lines_in).funct3;
-
     // By bytes (lb):
     if (funct3 == 0b000)
     {
@@ -134,6 +133,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
     (*BUS_in).WB = output;
     // std::cout << "Data memory: 0x" << std::hex << output << " to WB" << std::endl;
     // std::cout << "ram[0x7fe88]: 0x" << std::hex << (int)ram[0x7fe88+3] << std::hex << (int)ram[0x7fe88+2] << std::hex << (int)ram[0x7fe88+1] << std::hex << (int)ram[0x7fe88] << std::endl;
+    return *BUS_in;
 }
 
 void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emulator::Types::BUSES_t *BUS_in)

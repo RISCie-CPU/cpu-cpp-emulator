@@ -21,6 +21,14 @@ Emulator::Types::BUSES_t ProgramCounter::update_BUS(
 
     int output_address;
     // std::cout << "1: " << std::hex << current_address << std::endl;
+    // std::cout << "Mode: " << mode << std::endl;
+    // std::cout << "SRC0: " << SRC0 << std::endl;
+    // std::cout << "SRC1: " << SRC1 << std::endl;
+    // std::cout << "_SRC0: " << control_lines_in.PC_SRC_0 << std::endl;
+    // std::cout << "_SRC1: " << control_lines_in.PC_SRC_1 << std::endl;
+    // std::cout << "(!control_lines_in.TAKE_BRANCH & SRC0): " << (!control_lines_in.TAKE_BRANCH & SRC0) << std::endl;
+    // std::cout << "(control_lines_in.BRANCH & control_lines_in.TAKE_BRANCH): " << (control_lines_in.BRANCH & control_lines_in.TAKE_BRANCH) << std::endl;
+    // std::cout << "control_lines_in.BRANCH: " << control_lines_in.BRANCH << std::endl;
     // Program counter + 4
     if (mode == 0) output_address = current_address + 4;
     // std::cout << "2: " << std::hex << output_address << std::endl;

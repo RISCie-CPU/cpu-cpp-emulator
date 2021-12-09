@@ -44,8 +44,8 @@ void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_l
     bool alu_op_0 = !(control_lines_in.STR_TO_RAM | control_lines_in.RAM_TO_WB);
     bool alu_op_1 = !(control_lines_in.ALU_SRC);
 
-    int temp_output;
-    bool temp_branch;
+    int temp_output = 0;
+    bool temp_branch = 0;
 
     if (alu_op_0 == 0) { funct3 = 0; }
     if (alu_op_1 == 0) { i = 0; }
@@ -70,6 +70,7 @@ void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_l
         else if (i == 1) { temp_output = (operand_x - operand_y) & 0xffffffff; }
         // beq
         if (operand_x == operand_y) { temp_branch = 1; }
+        // std::cout << "XX: " << te
     }
     else if (funct3 == 0b001)
     {

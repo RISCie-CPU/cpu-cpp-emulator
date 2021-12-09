@@ -195,6 +195,7 @@ bool DecodedInst::process_inst()
             my_type = I_TYPE;
             imm     = sign_extend(get_bits(31, 20), 12);
             rs1     = get_bits(19, 15);
+            rs2     = get_bits(24, 20);
             func3   = get_bits(14, 12);
             rd      = get_bits(11, 7);
             break;
@@ -204,6 +205,7 @@ bool DecodedInst::process_inst()
             my_type = I_TYPE;
             imm     = sign_extend(get_bits(31, 20), 12);
             rs1     = get_bits(19, 15);
+            rs2     = get_bits(24, 20);
             func3   = get_bits(14, 12);
             rd      = get_bits(11, 7);
             break;
@@ -226,8 +228,8 @@ bool DecodedInst::process_inst()
             // Check this math, note, last bit is always 0
             int temp_imm = (get_bits(31, 31) << 12) + (get_bits(7, 7) << 11) + (get_bits(30, 25) << 5) + (get_bits(11, 8) << 1);
             imm   = sign_extend(temp_imm, 13);
-            rs2   = get_bits(24, 20);
             rs1   = get_bits(19, 15);
+            rs2   = get_bits(24, 20);
             func3 = get_bits(14, 12);
             break;
         }
@@ -235,6 +237,8 @@ bool DecodedInst::process_inst()
             // lui
             my_type = U_TYPE;
             imm     = get_bits(31, 12) << 12; // F: bitshift added and tested
+            rs1     = 0;
+            rs2     = 0;
             rd      = get_bits(11, 7);
             break;
         case 0x67:
@@ -253,6 +257,8 @@ bool DecodedInst::process_inst()
             // Note bit 0 is always 0
             int temp_imm = (get_bits(31, 31) << 20) + (get_bits(19, 12) << 12) + (get_bits(20, 20) << 11) + (get_bits(30, 21) << 1);
             imm = sign_extend(temp_imm, 21);
+            rs1     = 0;
+            rs2     = 0;
             rd  = get_bits(11, 7);
             break;
         }
@@ -260,6 +266,8 @@ bool DecodedInst::process_inst()
             // auipc
             my_type = U_TYPE;
             imm     = get_bits(31, 12) << 12;
+            rs1     = 0;
+            rs2     = 0;
             rd      = get_bits(11, 7);
             break;
         default:

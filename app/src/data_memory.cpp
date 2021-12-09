@@ -44,6 +44,11 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         // VRAM
 
         // Special registers
+        // Special registers
+        if (addr >> 30 != 0)
+        {
+            output = 0;
+        }
     }
     // By halfs (lh):
     if (funct3 == 0b001)
@@ -60,6 +65,11 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         // VRAM
 
         // Special registers
+        // Special registers
+        if (addr >> 30 != 0)
+        {
+            output = 0;
+        }
     }
     // By words (lw):
     if (funct3 == 0b010)
@@ -76,6 +86,10 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         // VRAM
 
         // Special registers
+        if (addr >> 30 != 0)
+        {
+            output = 0;
+        }
     }
     // By bytes unsigned (lbu):
     if (funct3 == 0b100)
@@ -90,6 +104,11 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         // VRAM
 
         // Special registers
+        // Special registers
+        if (addr >> 30 != 0)
+        {
+            output = 0;
+        }
     }
     // By halfes unsigned (lhu):
     if (funct3 == 0b101)
@@ -105,6 +124,11 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         // VRAM
 
         // Special registers
+        // Special registers
+        if (addr >> 30 != 0)
+        {
+            output = 0;
+        }
     }
 
     (*BUS_in).WB = output;

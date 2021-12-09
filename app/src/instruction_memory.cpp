@@ -242,6 +242,7 @@ bool DecodedInst::process_inst()
             my_type = I_TYPE;
             imm     = sign_extend(get_bits(31, 20), 12);
             rs1     = get_bits(19, 15);
+            rs2     = get_bits(24, 20);
             func3   = get_bits(14, 12);
             rd      = get_bits(11, 7);
             break;

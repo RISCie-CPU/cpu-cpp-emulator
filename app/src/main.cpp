@@ -139,7 +139,8 @@ int main(int argc, char *argv[])
                 break;
             }
 
-        if (counter == 0x13) {running = false;}
+        // if (counter == 0x53) {running = false;}
+        if (counter == 0x1267) {running = false;}
         counter++;
     }    
 

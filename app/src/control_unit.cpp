@@ -25,7 +25,7 @@ Emulator::Types::control_lines_t ControlUnit::update_control_signals(
             break;
         case 0x03:
             // lb, lh, lw, lbu, lhu
-            control_lines_in.ALU_SRC       = 0;
+            control_lines_in.ALU_SRC       = 1;
             control_lines_in.ALU_TO_WB     = 0;
             control_lines_in.AUIPC         = 0;
             control_lines_in.IMM_GEN_CTR_0 = 0;

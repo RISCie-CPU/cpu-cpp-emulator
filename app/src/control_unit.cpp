@@ -25,7 +25,7 @@ Emulator::Types::control_lines_t ControlUnit::update_control_signals(
             break;
         case 0x03:
             // lb, lh, lw, lbu, lhu
-            control_lines_in.ALU_SRC       = 0;
+            control_lines_in.ALU_SRC       = 1;
             control_lines_in.ALU_TO_WB     = 0;
             control_lines_in.AUIPC         = 0;
             control_lines_in.IMM_GEN_CTR_0 = 0;
@@ -162,7 +162,7 @@ void ControlUnit::print_control_signals(
 )
 {
     // std::cout << "\n-------------------- Control signals --------------------\n";
-    std::cout << "\nControl signals:" << std::endl;
+    std::cout << "\nControl signals: ";
     if (control_lines_in.ALU_SRC == 1) std::cout << "ALU_SRC ";
     if (control_lines_in.ALU_TO_WB == 1) std::cout << "ALU_TO_WB ";
     if (control_lines_in.AUIPC == 1) std::cout << "ALU_TO_AUIPC ";
@@ -176,6 +176,6 @@ void ControlUnit::print_control_signals(
     if (control_lines_in.STR_TO_RAM == 1) std::cout << "STR_TO_RAM ";
     if (control_lines_in.STR_TO_RF == 1) std::cout << "STR_TO_RF ";
     if (control_lines_in.TAKE_BRANCH == 1) std::cout << "TAKE_BRANCH ";
-    // std::count << std::endl;
-    std::cout << "\n---------------------------------------------------------\n";
+    std::cout << "\n";
+    // std::cout << "\n---------------------------------------------------------\n";
 }

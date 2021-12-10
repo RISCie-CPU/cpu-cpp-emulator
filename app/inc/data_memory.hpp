@@ -15,7 +15,8 @@ private:
     uint8_t* ram;
     signed int sign_extend(signed int data, int data_lenght);
 public:
-
+    uint8_t* video_ram;
+    
     DataMemory();
 
     Emulator::Types::BUSES_t load(

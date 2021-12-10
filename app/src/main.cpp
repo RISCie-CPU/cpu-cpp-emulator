@@ -1,4 +1,7 @@
+#define OLC_PGE_APPLICATION
+#include "olcPixelGameEngine.h"
 #include <iostream>
+#include <bitset>
 
 #include "types.hpp"
 #include "consts.hpp"
@@ -10,13 +13,21 @@
 #include "ALU_SH.hpp"
 #include "data_memory.hpp"
 
-int main(int argc, char *argv[])
+
+class Example : public olc::PixelGameEngine
 {
+public:
+	Example(char* filename)
+	{
+		sAppName = "Example";
+        Rom = new InstructionMemory(filename);
+	}
+    
+    char* current_filename;
     Emulator::Types::control_lines_t control_lines;
     Emulator::Types::BUSES_t BUS;
-
-    // Loads an instruction memory object with the file specified by the first command-line argument
-    InstructionMemory Rom(argv[1]);
+    // Rom has to be a pointer as it's value is not known when initialized
+    InstructionMemory *Rom;
     ControlUnit Decoder;
     ProgramCounter Program_counter;
     Register TR0;
@@ -26,11 +37,6 @@ int main(int argc, char *argv[])
     RegisterFile Register_file;
     DataMemory Data_memory;
 
-
-    // Initialize BUS lanes to 0 (More will be added)
-    BUS.IMM_TO_PC = 0;
-    BUS.PC_to_IM  = 0;
-
     // Initialize basic variables
     int phase = 0; // either 0 or 1
     int clock = 0; // either 0 or 1
@@ -39,9 +45,34 @@ int main(int argc, char *argv[])
     // Not used by CPU, just for diagnostics
     int counter = 0;
 
-    while(running)
-    {
-        /*
+public:
+	bool OnUserCreate() override
+	{
+        std::cout<<"Before or after"<<std::endl;
+            // Initialize BUS lanes to 0 (More will be added)
+        BUS.IMM_TO_PC = 0;
+        BUS.PC_to_IM  = 0;
+		return true;
+	}
+
+	bool OnUserUpdate(float fElapsedTime) override
+	{
+		// called once per frame
+		for (int x = 0; x < ScreenWidth(); x++){
+			for (int y = 0; y < ScreenHeight(); y++){
+                int pos = (y*199)+x;
+                int test = Data_memory.video_ram[pos/8]&(0b10000000>>(pos%8));
+                if(test!=0){
+                    Draw(x, y, olc::Pixel(255, 255, 255));	
+                }else{
+                    Draw(x, y, olc::Pixel(0, 0, 0));
+                }
+            }
+        }
+            
+        //main loop
+        //---------------------------------------------------------------------------
+         /*
         *       Clock 0, PHASE 0
         */
             clock = 0;
@@ -49,7 +80,7 @@ int main(int argc, char *argv[])
             std::cout << "\n--------------- " << "New instruction (" << counter << ")" << " ---------------" << std::endl;
 
             // Get current instruction and print its properties
-            DecodedInst current_inst = Rom.get_decoded_inst(BUS.PC_to_IM >> 2);
+            DecodedInst current_inst = Rom->get_decoded_inst(BUS.PC_to_IM >> 2);
             current_inst.print_info();
             // Decode current instruction into control lines and print them
             control_lines = Decoder.update_control_signals(current_inst.opcode, control_lines);
@@ -104,7 +135,6 @@ int main(int argc, char *argv[])
         */
             clock = 0;
             phase = 1;
-
             if (control_lines.STR_TO_RAM == 1)
             {
                 Data_memory.store(&control_lines, &BUS);
@@ -113,7 +143,7 @@ int main(int argc, char *argv[])
             {
                 Data_memory.load(&control_lines, &BUS);
             }
-
+            
             // MUX (WB / TR2) as data to destination register. Depends on PC_SRC 0 or 1
             if ((control_lines.PC_SRC_0 | control_lines.PC_SRC_1) == 0) { BUS.WB_TO_RF = BUS.WB; }
             else { BUS.WB_TO_RF = BUS.PC_TO_TR2; }
@@ -123,7 +153,7 @@ int main(int argc, char *argv[])
         */
             clock = 1;
             phase = 1;
-
+            
             // Store to register file in needed
             if (control_lines.STR_TO_RF == 1) { Register_file.write(BUS, current_inst.rd);  }
             Register_file.Test();
@@ -136,78 +166,22 @@ int main(int argc, char *argv[])
                 running = false;
                 std::cout << "\nEnd of program." << std::endl;
                 Data_memory.print();
-                break;
+                //break;
             }
 
         if (counter == 0x2f72) {running = false;}
         counter++;
-    }    
+        //--------------------------------------------------------------------------------------------
+        //End Loop
+		return true;
+	}
+	
+};
 
-
-    // Main loop; one loop cycle = one clock period, PHASE = 2*clock period
-    // while (running)
-    // {
-    //     /*
-    //      *       Clock is 0 for PHASE 0 or 1
-    //      */
-    //     clock = 0;
-    //     std::cout << "\nPhase: " << phase << std::endl;
-
-    //     int current_address = BUS.PC_to_IM;
-
-    //     // Get current instruction and print its properties
-    //     DecodedInst current_inst = Rom.get_decoded_inst(current_address >> 2);
-    //     current_inst.print_info();
-      
-    //     // Send Immediate to Writeback
-    //     if (control_lines.IMM_TO_WB == 1) { BUS.WB = current_inst.imm; }
-        
-    //     //Test Register File with a read and write
-    //     Register_file.write(BUS, current_inst.rd);
-    //     Register_file.read(BUS, current_inst.rs1,current_inst.rs2);
-
-    //     // Stop when the instruciton jumps to itself (Had to put it here and not at the end bcs segmentation fault when it tried to read non existing instruction)
-    //     if (current_inst.instruction == Emulator::Consts::END_INSTRUCTION)
-    //     {
-    //         running = false;
-    //         std::cout << "\nEnd of program." << std::endl;
-    //         break;
-    //     }
-
-    //     // Decode current instruction into control lines and print them
-    //     control_lines = Decoder.update_control_signals(current_inst.opcode, control_lines);
-    //     Decoder.print_control_signals(control_lines);
-
-    //     // Update program counter, in PHASE 1 it will load new value. Needs to be last
-    //     BUS = Program_counter.update_BUS(BUS, control_lines, phase, clock);
-
-    //     // Register file:
-
-    //     // Updates the ALU
-    //     ALU.update(&BUS, &control_lines);
-        
-
-    //     /*
-    //      *       Clock is 1 for PHASE 0 or 1
-    //      */
-    //     clock = 1;
-
-    //     // Update temporary registers
-    //     if (phase == 0 && clock == 1)
-    //     {
-    //         // TR0: TODO
-    //         // TR1: TODO
-    //         BUS.TR2_TO_MUX = TR2.update(BUS.PC_TO_TR2);
-    //     }
-
-    //     // Updates the ALU again
-    //     ALU.update(&BUS, &control_lines);
-
-    //     // Send ALU output to Writeback
-    //     if (control_lines.ALU_TO_WB == 1) { BUS.WB = BUS.ALU_TO_DM; }
-
-    //     // Change phases (from 0 to 1, from 1 to 0)
-    //     phase = (phase + 1) % 2;
-    // }
-    // Register_file.Test();
+int main(int argc, char *argv[])
+{
+    Example demo(argv[1]);
+    //Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels
+	if (demo.Construct(200, 150, 3, 3))
+		demo.Start();
 } // main

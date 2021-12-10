@@ -33,6 +33,8 @@ CPP_SOURCES += $(wildcard src/*.cpp)
 ########################################
 CPP = g++
 
+OLC_FLAGS =-lX11 -lGL -lpthread -lpng -lstdc++fs -std=c++17
+
 ########################################
 # Flags for compiler
 ########################################
@@ -69,7 +71,7 @@ $(BUILD_DIR)/%.o: %.cpp Makefile | $(BUILD_DIR)
 	@$(CPP) -c $(CPP_FLAGS) $< -o $@
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
-	@$(CPP) $(OBJECTS) -o $@
+	@$(CPP) $(OBJECTS) $(OLC_FLAGS) -o $@
 
 $(BUILD_DIR):
 	mkdir $@

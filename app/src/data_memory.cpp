@@ -11,6 +11,7 @@ void DataMemory::print(){
 
 DataMemory::DataMemory(){
     ram = new uint8_t[131072 * 4];
+    video_ram = new uint8_t[3750];
 }
 
 signed int DataMemory::sign_extend(signed int data, int data_lenght)
@@ -159,8 +160,11 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
             std::cout << "Data memory: sb, 0x" << std::hex << to_store << " --> [0x" << std::hex << addr << "]" << std::endl;
             addr = addr % 524288;  // 2 ** 19
             ram[addr] = to_store & 0xff;
+        }else if(addr >> 30 ==1){
+            //VRAM
+            addr = addr % 8192;  // 2 ** 13
+            video_ram[addr] = to_store & 0xff;
         }
-        // VRAM
 
         // Special registers
     }
@@ -174,8 +178,12 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
             addr = addr % 524288;  // 2 ** 19
             ram[addr + 0] = (to_store & 0x00ff) >> 0;
             ram[addr + 1] = (to_store & 0xff00) >> 8;
-        }
-        // VRAM
+        }else if(addr>>30==1){
+            //VRAM
+            addr = addr % 8192;  // 2 ** 13
+            video_ram[addr + 0] = (to_store & 0x00ff) >> 0;
+            video_ram[addr + 1] = (to_store & 0xff00) >> 8;
+        }   
 
         // Special registers
     }
@@ -191,8 +199,14 @@ void DataMemory::store(Emulator::Types::control_lines_t *control_lines_in, Emula
             ram[addr + 1] = (to_store & 0x0000ff00) >> 8;
             ram[addr + 2] = (to_store & 0x00ff0000) >> 16;
             ram[addr + 3] = (to_store & 0xff000000) >> 24;
+        }else if(addr>>30==1){ 
+            //VRAM
+            addr = addr % 8192;  // 2 ** 13
+            video_ram[addr + 0] = (to_store & 0x000000ff) >> 0;
+            video_ram[addr + 1] = (to_store & 0x0000ff00) >> 8;
+            video_ram[addr + 2] = (to_store & 0x00ff0000) >> 16;
+            video_ram[addr + 3] = (to_store & 0xff000000) >> 24;
         }
-        // VRAM
 
         // Special registers
     }

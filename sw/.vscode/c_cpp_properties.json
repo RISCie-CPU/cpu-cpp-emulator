@@ -4,11 +4,12 @@
             "name": "CPU Emulator",
             "includePath": [
                 "${workspaceFolder}/**",
-                "inc/**"
+                "app/inc/**",
+                "modules/olc/OneLoneCoder/PGE App.xctemplate/**"
             ],
             "defines": [],
             "cStandard": "c99",
-            "cppStandard": "c++11",
+            "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64"
         }
     ],

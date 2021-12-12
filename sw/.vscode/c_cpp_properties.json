@@ -4,7 +4,8 @@
             "name": "CPU Emulator",
             "includePath": [
                 "${workspaceFolder}/**",
-                "app/inc/**"
+                "app/inc/**",
+                "modules/olc/OneLoneCoder/PGE App.xctemplate/**"
             ],
             "defines": [],
             "cStandard": "c99",

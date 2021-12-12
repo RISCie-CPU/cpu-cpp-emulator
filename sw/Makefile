@@ -42,7 +42,8 @@ C_DEFS =
 
 # CPP includes
 CPP_INCLUDES = \
--Iapp/inc
+-Iapp/inc \
+"-Imodules/olc/OneLoneCoder/PGE App.xctemplate"
 
 CPP_FLAGS = -std=c++17 $(OPT) $(CPP_INCLUDES) $(CPP_DEFS)
 

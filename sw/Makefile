@@ -57,7 +57,21 @@ CPP_FLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 ########################################
 # Flags for linker
 ########################################
-LIBS = -lX11 -lGL -lpthread -lpng
+
+LIBS = -lpng
+
+ifeq ($(OS),Windows_NT)
+	exit
+else
+	UNAME := $(shell uname)
+	ifeq ($(UNAME),Linux)
+		LIBS += -lX11 -lGL -lpthread
+	endif
+	ifeq ($(UNAME),Darwin)
+		LIBS += -framework OpenGL -framework GLUT -framework Carbon
+	endif
+endif
+
 LDFLAGS = $(LIBS)
 
 #######################################

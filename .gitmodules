@@ -1,0 +1,3 @@
+[submodule "sw/modules/olc"]
+	path = sw/modules/olc
+	url = https://github.com/MumflrFumperdink/olcPGEMac.git

@@ -175,7 +175,7 @@ bool DecodedInst::process_inst()
 {
     // Grab obcode from bit 6 downto 0
     opcode = get_bits(6, 0);
-    
+
     // F: Sign extend using intiger size property
 
     // Instruction Encoding depends on the instruction type.
@@ -257,8 +257,8 @@ bool DecodedInst::process_inst()
             // Note bit 0 is always 0
             int temp_imm = (get_bits(31, 31) << 20) + (get_bits(19, 12) << 12) + (get_bits(20, 20) << 11) + (get_bits(30, 21) << 1);
             imm = sign_extend(temp_imm, 21);
-            rs1     = 0;
-            rs2     = 0;
+            rs1 = 0;
+            rs2 = 0;
             rd  = get_bits(11, 7);
             break;
         }

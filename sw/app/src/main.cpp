@@ -62,7 +62,7 @@ public:
         {
             for (int y = 0; y < ScreenHeight(); y++)
             {
-                int pos  = (y * 199) + x;
+                int pos  = (y * 256) + x;
                 int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
                 if (test != 0)
                 {

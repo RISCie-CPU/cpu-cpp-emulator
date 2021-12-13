@@ -81,7 +81,7 @@ public:
 
         /*
          *  --------------- Phase 0 LOW ---------------
-         *      RISCie will: 
+         *      RISCie will:
          *      1. Decode instructions into control signals
          *      2. Calculate immediate value
          *      3. Load data from register file
@@ -110,8 +110,8 @@ public:
 
         /*
          *  --------------- Phase 0 HIGH ---------------
-         *      RISCie will: 
-         *      1. Store data to temporary registers 
+         *      RISCie will:
+         *      1. Store data to temporary registers
          *      (TR0 & TR1 will have data from register file)
          *      2. Waits until ALU will calculate its result
          */
@@ -143,7 +143,7 @@ public:
 
         /*
          *  --------------- Phase 1 LOW ---------------
-         *      RISCie will: 
+         *      RISCie will:
          *      Chill, waits till values from ALU are stable
          */
 
@@ -152,7 +152,7 @@ public:
 
         /*
          *  --------------- Phase 1 HIGH ---------------
-         *      RISCie will: 
+         *      RISCie will:
          *      1. Store to RF/RAM/PC
          */
 
@@ -174,7 +174,7 @@ public:
         // Store to program counter + load new value (loading new value is done @ falling edge)
         BUS = Program_counter.update_BUS(BUS, control_lines, phase, 0);
 
-        // For debug only 
+        // For debug only
         counter++;
 
         // --------------------------------------------------------------------------------------------
@@ -185,9 +185,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-    #ifdef DEBUG
-        dbg("Test Debug");
-    #endif
+    dbg("Test Debug");
 
     Example demo(argv[1]);
     // Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels

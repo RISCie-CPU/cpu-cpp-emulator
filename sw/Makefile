@@ -38,7 +38,11 @@ CPP = g++
 ########################################
 
 # CPP defines
-C_DEFS =
+CPP_DEFS =
+
+ifeq ($(DEBUG), 1)
+  CPP_DEFS += -DDEBUG=1
+endif
 
 # CPP includes
 CPP_INCLUDES = \
@@ -48,7 +52,7 @@ CPP_INCLUDES = \
 CPP_FLAGS = -std=c++17 $(OPT) $(CPP_INCLUDES) $(CPP_DEFS)
 
 ifeq ($(DEBUG), 1)
-CPP_FLAGS += --debug
+    CPP_FLAGS += --debug
 endif
 
 # Generate dependency information
@@ -61,15 +65,15 @@ CPP_FLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LIBS = -lpng
 
 ifeq ($(OS),Windows_NT)
-	exit
+    exit
 else
-	UNAME := $(shell uname)
-	ifeq ($(UNAME),Linux)
-		LIBS += -lX11 -lGL -lpthread
-	endif
-	ifeq ($(UNAME),Darwin)
-		LIBS += -framework OpenGL -framework GLUT -framework Carbon
-	endif
+    UNAME := $(shell uname)
+    ifeq ($(UNAME),Linux)
+        LIBS += -lX11 -lGL -lpthread
+    endif
+    ifeq ($(UNAME),Darwin)
+        LIBS += -framework OpenGL -framework GLUT -framework Carbon
+    endif
 endif
 
 LDFLAGS = $(LIBS)

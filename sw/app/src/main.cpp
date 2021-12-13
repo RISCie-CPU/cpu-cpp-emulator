@@ -12,6 +12,7 @@
 #include "register_file.hpp"
 #include "alu_sh.hpp"
 #include "data_memory.hpp"
+#include "debug.hpp"
 
 
 class Example : public olc::PixelGameEngine
@@ -184,8 +185,14 @@ public:
 
 int main(int argc, char *argv[])
 {
+    #ifdef DEBUG
+        dbg("Test Debug");
+    #endif
+
     Example demo(argv[1]);
     // Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels
     if (demo.Construct(200, 150, 3, 3))
         demo.Start();
+
+    return 0;
 } // main

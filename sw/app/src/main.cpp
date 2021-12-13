@@ -185,7 +185,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-    dbg("Test Debug");
+    dbg("Test output: " << 42 << " may be what we are looking for...");
 
     Example demo(argv[1]);
     // Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels

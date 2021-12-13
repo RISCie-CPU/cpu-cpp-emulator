@@ -1,11 +1,11 @@
-#include "ALU_SH.hpp"
+#include "alu_sh.hpp"
 
 /*
     Inputs:
         - X - 32b input data
         - Y - 32b input data
         - i - 31. bit in instruction
-        - funct3: 
+        - funct3:
             000: add ('i' = 0)
             000: sub ('i' = 1)
             001: sll
@@ -26,7 +26,7 @@
     Outputs:
         - result - 32b ouptut
         - branch - 1b, confirmation of conditional jump
-    
+
 */
 
 ALU_SH::ALU_SH(){
@@ -34,13 +34,13 @@ ALU_SH::ALU_SH(){
 }
 
 void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_lines_t &control_lines_in){
-    int operand_x = (*BUS_in).TR0_TO_ALU0;   
+    int operand_x = (*BUS_in).TR0_TO_ALU0;
     int operand_y = (*BUS_in).ALU_MUX_TO_ALU1;
     int funct3 = control_lines_in.funct3;
     // int funct3 = 0;
     bool i = control_lines_in.i;
     bool mode = control_lines_in.TAKE_BRANCH;
-    
+
     bool alu_op_0 = !(control_lines_in.STR_TO_RAM | control_lines_in.RAM_TO_WB);
     bool alu_op_1 = !(control_lines_in.ALU_SRC);
 

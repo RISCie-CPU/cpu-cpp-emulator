@@ -10,7 +10,7 @@
 #include "program_counter.hpp"
 #include "register.hpp"
 #include "register_file.hpp"
-#include "ALU_SH.hpp"
+#include "alu_sh.hpp"
 #include "data_memory.hpp"
 
 
@@ -22,7 +22,7 @@ public:
 		sAppName = "Example";
         Rom = new InstructionMemory(filename);
 	}
-    
+
     char* current_filename;
     Emulator::Types::control_lines_t control_lines;
     Emulator::Types::BUSES_t BUS;
@@ -63,13 +63,13 @@ public:
                 int pos = (y*199)+x;
                 int test = Data_memory.video_ram[pos/8]&(0b10000000>>(pos%8));
                 if(test!=0){
-                    Draw(x, y, olc::Pixel(255, 255, 255));	
+                    Draw(x, y, olc::Pixel(255, 255, 255));
                 }else{
                     Draw(x, y, olc::Pixel(0, 0, 0));
                 }
             }
         }
-            
+
         //main loop
         //---------------------------------------------------------------------------
          /*
@@ -143,7 +143,7 @@ public:
             {
                 Data_memory.load(&control_lines, &BUS);
             }
-            
+
             // MUX (WB / TR2) as data to destination register. Depends on PC_SRC 0 or 1
             if ((control_lines.PC_SRC_0 | control_lines.PC_SRC_1) == 0) { BUS.WB_TO_RF = BUS.WB; }
             else { BUS.WB_TO_RF = BUS.PC_TO_TR2; }
@@ -153,11 +153,11 @@ public:
         */
             clock = 1;
             phase = 1;
-            
+
             // Store to register file in needed
             if (control_lines.STR_TO_RF == 1) { Register_file.write(BUS, current_inst.rd);  }
             Register_file.Test();
-            
+
 
             BUS = Program_counter.update_BUS(BUS, control_lines, phase, 0);
 
@@ -175,7 +175,7 @@ public:
         //End Loop
 		return true;
 	}
-	
+
 };
 
 int main(int argc, char *argv[])

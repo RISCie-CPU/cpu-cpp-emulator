@@ -1,5 +1,5 @@
 #include "program_counter.hpp"
-
+#include "debug.hpp"
 
 ProgramCounter::ProgramCounter()
 {
@@ -12,7 +12,7 @@ Emulator::Types::BUSES_t ProgramCounter::update_BUS(
     int phase_in, int clock_in
 )
 {
-    std::cout << "PC update" << std::endl;
+    dbg("PC update");
     logic_wire_0 = ((control_lines_in.AUIPC & (phase_in == 0)) | (!control_lines_in.AUIPC & (phase_in == 1)));
 
     SRC0 = control_lines_in.PC_SRC_0 & logic_wire_0;
@@ -45,7 +45,7 @@ Emulator::Types::BUSES_t ProgramCounter::update_BUS(
     {
         current_address = BUS_in.PC_TO_TR2;
         BUS_in.PC_to_IM = current_address;
-        std::cout << "New PC value: " << std::hex << current_address << std::endl;
+        dbg("New PC value: " << std::hex << current_address);
 
         // TODO: repeated code, space for optimization
         // Program counter + 4

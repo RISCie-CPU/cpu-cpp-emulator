@@ -5,6 +5,7 @@
 
 #include "types.hpp"
 #include "consts.hpp"
+#include "debug.hpp"
 #include "instruction_memory.hpp"
 #include "control_unit.hpp"
 #include "program_counter.hpp"
@@ -12,7 +13,6 @@
 #include "register_file.hpp"
 #include "alu_sh.hpp"
 #include "data_memory.hpp"
-#include "debug.hpp"
 
 
 class Example : public olc::PixelGameEngine
@@ -59,6 +59,7 @@ public:
     bool OnUserUpdate(float fElapsedTime) override
     {
         // called once per frame
+        // TODO: Update only when needed, i.e. when writing to VRAM
         for (int x = 0; x < ScreenWidth(); x++)
         {
             for (int y = 0; y < ScreenHeight(); y++)
@@ -87,16 +88,20 @@ public:
          *      3. Load data from register file
          */
 
-        clock = 0;
-        phase = 0;
-        std::cout << "\n--------------- " << "New instruction (" << counter << ")" << " ---------------" << std::endl;
+        dbg("\n--------------- " << "New instruction (" << counter << ")" << " ---------------");
+        // std::cout << "\n--------------- " << "New instruction (" << counter << ")" << " ---------------" << std::endl;
 
         // Get current instruction and print its properties
         DecodedInst current_inst = Rom->get_decoded_inst(BUS.PC_to_IM >> 2);
-        current_inst.print_info();
         // Decode current instruction into control lines and print them
         control_lines = Decoder.update_control_signals(current_inst.opcode, control_lines);
-        Decoder.print_control_signals(control_lines);
+        
+        #ifdef DEBUG
+            current_inst.print_info();
+            Decoder.print_control_signals(control_lines);
+        #else
+            # define dbg(MSG) do { } while (0)
+        #endif
 
         control_lines.funct3 = current_inst.func3;
         control_lines.i      = (bool) (((current_inst.instruction) >> 30) & 1);
@@ -116,10 +121,7 @@ public:
          *      2. Waits until ALU will calculate its result
          */
 
-        clock = 1;
-        phase = 0;
-
-        BUS = Program_counter.update_BUS(BUS, control_lines, phase, clock);
+        BUS = Program_counter.update_BUS(BUS, control_lines, 0, 1);
 
         // Store register output to temporary register 0 and 1
         BUS.TR0_TO_ALU0 = TR0.update(BUS.RF0_TO_TR0);
@@ -127,16 +129,17 @@ public:
         // Update temporary register 2
         BUS.TR2_TO_MUX = TR2.update(BUS.PC_TO_TR2);
 
-        std::cout << "TR0: 0x" << std::hex << BUS.TR0_TO_ALU0 << "\t";
-        std::cout << "TR1: 0x" << std::hex << BUS.TR1_TO_RAMD << "\t";
-        std::cout << "TR2: 0x" << std::hex << BUS.TR2_TO_MUX << std::endl;
+        dbg("TR0: 0x" << std::hex << BUS.TR0_TO_ALU0);
+        dbg("TR1: 0x" << std::hex << BUS.TR1_TO_RAMD);
+        dbg("TR2: 0x" << std::hex << BUS.TR2_TO_MUX);
 
         // MUX (TR1 / Immediate) to ALU source 1. Depends on ALU_SRC
         if (control_lines.ALU_SRC == 0) BUS.ALU_MUX_TO_ALU1 = BUS.TR1_TO_RAMD;
         else BUS.ALU_MUX_TO_ALU1 = current_inst.imm;
 
         ALU.update(&BUS, control_lines);
-        std::cout << "ALU output: 0x" << std::hex << BUS.ALU_TO_DM << std::endl;
+        dbg("ALU output: 0x" << std::hex << BUS.ALU_TO_DM);
+        // std::cout << "ALU output: 0x" << std::hex << BUS.ALU_TO_DM << std::endl;
 
         // Send ALU output to Writeback if needed
         if (control_lines.ALU_TO_WB == 1) BUS.WB = BUS.ALU_TO_DM;
@@ -147,17 +150,13 @@ public:
          *      Chill, waits till values from ALU are stable
          */
 
-        clock = 0;
-        phase = 1;
+            // nothing important
 
         /*
          *  --------------- Phase 1 HIGH ---------------
          *      RISCie will:
          *      1. Store to RF/RAM/PC
          */
-
-        clock = 1;
-        phase = 1;
 
         // Store or load from Data memory
         if (control_lines.STR_TO_RAM == 1) Data_memory.store(&control_lines, &BUS);
@@ -169,10 +168,10 @@ public:
 
         // Store to register file in needed
         if (control_lines.STR_TO_RF == 1) Register_file.write(BUS, current_inst.rd);
-        Register_file.Test();
+        // Register_file.Test();
 
         // Store to program counter + load new value (loading new value is done @ falling edge)
-        BUS = Program_counter.update_BUS(BUS, control_lines, phase, 0);
+        BUS = Program_counter.update_BUS(BUS, control_lines, 1, 0);
 
         // For debug only
         counter++;

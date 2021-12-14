@@ -1,9 +1,10 @@
 #include "register_file.hpp"
+#include "debug.hpp"
 
 RegisterFile::RegisterFile()
 {
-    // register_array[0].update(10);
-    // register_array[3].update(14);
+    // Initialize register 0 to 0
+    register_array[0].update(0);
 }
 
 void RegisterFile::Test()
@@ -17,15 +18,11 @@ void RegisterFile::Test()
 
 void RegisterFile::write(Emulator::Types::BUSES_t &BUS_in, int rd)
 {
+    // Value in register 0 must always stay 0
     if (rd != 0)
     {
         register_array[rd].update(BUS_in.WB_TO_RF);
-        std::cout << "Register File: Writing 0x" << std::hex << BUS_in.WB_TO_RF << " --> [0x" << std::hex << rd << "]" << std::endl;
-    }
-    if (rd == 1)
-    {
-        // std::cout<<"Reg "<<std::dec<<i<<std::hex<<": 0x"<<register_array[i].stored_value<<std::endl;
-        // std::cout << "----------------------------------------------------------------------------" << std::endl;
+        dbg("Register File: Writing 0x" << std::hex << BUS_in.WB_TO_RF << " --> [0x" << std::hex << rd << "]");
     }
 }
 

@@ -16,6 +16,7 @@ DataMemory::DataMemory()
     video_ram = new uint8_t[3750];
 }
 
+
 signed int DataMemory::sign_extend(signed int data, int data_lenght)
 {
     // 32-12 = 20
@@ -110,6 +111,11 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         if (addr >> 30 != 0)
         {
             output = 0;
+        }
+
+        //Keyboard Memory Location
+        if(addr==0x80000004){
+            output = 0x32;
         }
     }
     // By halfes unsigned (lhu):

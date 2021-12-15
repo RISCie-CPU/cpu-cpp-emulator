@@ -48,7 +48,6 @@ public:
     // Not used by CPU, just for diagnostics
     int counter = 0;
     
-    float draw_delay = 0.0;
 public:
     bool OnUserCreate() override
     {
@@ -59,29 +58,28 @@ public:
         return true;
     }
 
+    void WriteToScreen(unsigned addr, int data){
+
+    }
+
     bool OnUserUpdate(float fElapsedTime) override
     {
-        if(draw_delay > 0.05){
-            for (int x = 0; x < ScreenWidth(); x++)
-            {
-                for (int y = 0; y < ScreenHeight(); y++)
-                {
-                    int pos  = (y * 256) + x;
-                    int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
-                    if (test != 0)
-                    {
-                        Draw(x, y, olc::Pixel(255, 255, 255));
-                    }
-                    else
-                    {
-                        Draw(x, y, olc::Pixel(0, 0, 0));
-                    }
-                }
-            }
-            draw_delay = 0.0;
-        }else{
-            draw_delay += fElapsedTime;
-        }
+        // for (int x = 0; x < ScreenWidth(); x++)
+        // {
+        //     for (int y = 0; y < ScreenHeight(); y++)
+        //     {
+        //         int pos  = (y * 256) + x;
+        //         int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
+        //         if (test != 0)
+        //         {
+        //             Draw(x, y, olc::Pixel(255, 255, 255));
+        //         }
+        //         else
+        //         {
+        //             Draw(x, y, olc::Pixel(0, 0, 0));
+        //         }
+        //     }
+        // }
 
 
         //Collect Keyboard input
@@ -290,7 +288,28 @@ public:
 
         // Store or load from Data memory
         if (control_lines.STR_TO_RAM == 1){
-            Data_memory.store(&control_lines, &BUS);
+
+            if (BUS.ALU_TO_DM >> 30 == 1){
+                unsigned addr = BUS.ALU_TO_DM % 8192; 
+                unsigned data = BUS.TR1_TO_RAMD;
+
+                int ypos = (int)(addr/32);
+                int xpos = (addr%32)*8;
+                //Write to VRAM, so hijack and draw instead
+                // int pos  = (y * 256) + x;
+                // int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
+                for(int i=0; i<8; i++){
+                    if(data&0b00000001==0x1){
+                        Draw(xpos+i,ypos,olc::Pixel(255,255,255));
+                    }else{
+                        Draw(xpos+i,ypos,olc::Pixel(0,0,0));
+                    }
+                    data=data >> 1;
+                }
+            }else{
+                //All other memory
+                Data_memory.store(&control_lines, &BUS);
+            }
         }
         else if (control_lines.RAM_TO_WB == 1){
             // On load first check if it is reading from the keyboard port

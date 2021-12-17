@@ -47,6 +47,8 @@ public:
     bool running = true;
     // Not used by CPU, just for diagnostics
     int counter = 0;
+
+    bool didDraw = false;
     
 public:
     bool OnUserCreate() override
@@ -65,23 +67,10 @@ public:
     bool OnUserUpdate(float fElapsedTime) override
     {
 
-        for(int li=0; li<100; li++){
-        // for (int x = 0; x < ScreenWidth(); x++)
-        // {
-        //     for (int y = 0; y < ScreenHeight(); y++)
-        //     {
-        //         int pos  = (y * 256) + x;
-        //         int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
-        //         if (test != 0)
-        //         {
-        //             Draw(x, y, olc::Pixel(255, 255, 255));
-        //         }
-        //         else
-        //         {
-        //             Draw(x, y, olc::Pixel(0, 0, 0));
-        //         }
-        //     }
-        // }
+        while(true){
+
+        //This will be set to true, if VRAM is wrtitten
+        didDraw = false;
 
 
         //Collect Keyboard input
@@ -202,8 +191,11 @@ public:
             else if(GetKey(olc::Key::K0).bHeld){
                     cur_scan_code = 0x45;
             }
+            else if(GetKey(olc::Key::RETURN).bHeld){
+                    cur_scan_code = 0x5A;
+            }
             else{
-                cur_scan_code = 0x4;
+                cur_scan_code = 0x0;
             }
         }
 
@@ -308,6 +300,7 @@ public:
                     }
                     data=data >> 1;
                 }
+                didDraw = true;
             }else{
                 //All other memory
                 Data_memory.store(&control_lines, &BUS);
@@ -339,6 +332,11 @@ public:
 
         // --------------------------------------------------------------------------------------------
         // End Loop
+
+    if(didDraw==true){
+        break;
+    }
+    
     }
         return true;
     } // OnUserUpdate

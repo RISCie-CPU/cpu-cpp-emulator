@@ -64,6 +64,8 @@ public:
 
     bool OnUserUpdate(float fElapsedTime) override
     {
+
+        for(int li=0; li<100; li++){
         // for (int x = 0; x < ScreenWidth(); x++)
         // {
         //     for (int y = 0; y < ScreenHeight(); y++)
@@ -337,6 +339,7 @@ public:
 
         // --------------------------------------------------------------------------------------------
         // End Loop
+    }
         return true;
     } // OnUserUpdate
 };

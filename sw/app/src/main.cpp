@@ -150,13 +150,16 @@ public:
                     cur_scan_code = 0x22;
             }
             else if(GetKey(olc::Key::Y).bHeld){
-                    cur_scan_code = 0x35;
-            }
-            else if(GetKey(olc::Key::Z).bHeld){
                     cur_scan_code = 0x1A;
             }
-            else if(GetKey(olc::Key::RETURN).bHeld){
+            else if(GetKey(olc::Key::Z).bHeld){
+                    cur_scan_code = 0x35;
+            }
+            else if(GetKey(olc::Key::ENTER).bHeld){
                     cur_scan_code = 0x5A;
+            }
+            else if(GetKey(olc::Key::BACK).bHeld){
+                    cur_scan_code = 0x66;
             }
             else if(GetKey(olc::Key::SPACE).bHeld){
                     cur_scan_code = 0x29;
@@ -191,6 +194,18 @@ public:
             else if(GetKey(olc::Key::K0).bHeld){
                     cur_scan_code = 0x45;
             }
+            else if(GetKey(olc::Key::UP).bHeld){
+                    cur_scan_code = 0xA9;
+            }
+            else if(GetKey(olc::Key::DOWN).bHeld){
+                    cur_scan_code = 0xAB;
+            }
+            else if(GetKey(olc::Key::LEFT).bHeld){
+                    cur_scan_code = 0xAA;
+            }
+            else if(GetKey(olc::Key::RIGHT).bHeld){
+                    cur_scan_code = 0xAC;
+            }
             else if(GetKey(olc::Key::RETURN).bHeld){
                     cur_scan_code = 0x5A;
             }
@@ -217,6 +232,7 @@ public:
         DecodedInst current_inst = Rom->get_decoded_inst(BUS.PC_to_IM >> 2);
         // Decode current instruction into control lines and print them
         control_lines = Decoder.update_control_signals(current_inst.opcode, control_lines);
+        control_lines.funct3 = current_inst.func3;
         
         #ifdef DEBUG
             current_inst.print_info();
@@ -279,7 +295,6 @@ public:
          *      RISCie will:
          *      1. Store to RF/RAM/PC
          */
-
         // Store or load from Data memory
         if (control_lines.STR_TO_RAM == 1){
 
@@ -289,10 +304,24 @@ public:
 
                 int ypos = (int)(addr/32);
                 int xpos = (addr%32)*8;
+
+                int step = 8;
+
+                if (control_lines.funct3 == 0b001){
+                    //Byte
+                    step = 8;
+                    std::exit(1);
+                }else if (control_lines.funct3 == 0b001){
+                    //Half
+                    step = 16;
+                }else if (control_lines.funct3 == 0b010){
+                    //word
+                    step = 32;
+                }
                 //Write to VRAM, so hijack and draw instead
                 // int pos  = (y * 256) + x;
                 // int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
-                for(int i=0; i<8; i++){
+                for(int i=0; i<step; i++){
                     if(data&0b00000001==0x1){
                         Draw(xpos+i,ypos,olc::Pixel(255,255,255));
                     }else{

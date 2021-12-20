@@ -49,6 +49,7 @@ public:
     int counter = 0;
 
     bool didDraw = false;
+    int noDrawCount = 0;
     
 public:
     bool OnUserCreate() override
@@ -212,9 +213,9 @@ public:
             else if(GetKey(olc::Key::ESCAPE).bHeld){
                     cur_scan_code = 0x76;
             }
-        //     else{
-        //         cur_scan_code = 0x0;
-        //     }
+             else{
+                 cur_scan_code = 0x0;
+             }
         }
 
         // main loop
@@ -235,7 +236,7 @@ public:
         DecodedInst current_inst = Rom->get_decoded_inst(BUS.PC_to_IM >> 2);
         // Decode current instruction into control lines and print them
         control_lines = Decoder.update_control_signals(current_inst.opcode, control_lines);
-        control_lines.funct3 = current_inst.func3;
+        
         
         #ifdef DEBUG
             current_inst.print_info();
@@ -362,6 +363,17 @@ public:
         // For debug only
         counter++;
 
+        //std::cout<<noDrawCount<<std::endl;
+        if(didDraw==false){
+            noDrawCount++;
+            if (noDrawCount>500000){
+                didDraw=true;
+                //std::cout<<"Did Draw = true"<<rand() % 100<<std::endl;
+                noDrawCount=0;
+            }
+        }else{
+            noDrawCount=0;
+        }
         // --------------------------------------------------------------------------------------------
         // End Loop
 

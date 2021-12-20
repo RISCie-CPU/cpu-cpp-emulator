@@ -49,6 +49,7 @@ public:
     int counter = 0;
 
     bool didDraw = false;
+    int noDrawCount = 0;
     
 public:
     bool OnUserCreate() override
@@ -195,23 +196,26 @@ public:
                     cur_scan_code = 0x45;
             }
             else if(GetKey(olc::Key::UP).bHeld){
-                    cur_scan_code = 0xA9;
+                    cur_scan_code = 0x1;
             }
             else if(GetKey(olc::Key::DOWN).bHeld){
-                    cur_scan_code = 0xAB;
+                    cur_scan_code = 0x2;
             }
             else if(GetKey(olc::Key::LEFT).bHeld){
-                    cur_scan_code = 0xAA;
+                    cur_scan_code = 0x3;
             }
             else if(GetKey(olc::Key::RIGHT).bHeld){
-                    cur_scan_code = 0xAC;
+                    cur_scan_code = 0x4;
             }
             else if(GetKey(olc::Key::RETURN).bHeld){
                     cur_scan_code = 0x5A;
             }
-            else{
-                cur_scan_code = 0x0;
-            }
+            else if(GetKey(olc::Key::ESCAPE).bHeld){
+                    cur_scan_code = 0x76;
+              }
+             else{
+                 cur_scan_code = 0x0;
+             }
         }
 
         // main loop
@@ -232,7 +236,7 @@ public:
         DecodedInst current_inst = Rom->get_decoded_inst(BUS.PC_to_IM >> 2);
         // Decode current instruction into control lines and print them
         control_lines = Decoder.update_control_signals(current_inst.opcode, control_lines);
-        control_lines.funct3 = current_inst.func3;
+        
         
         #ifdef DEBUG
             current_inst.print_info();
@@ -359,6 +363,16 @@ public:
         // For debug only
         counter++;
 
+        //std::cout<<noDrawCount<<std::endl;
+        if(didDraw==false){
+            noDrawCount++;
+            if (noDrawCount>50){
+                didDraw=true;
+                //std::cout<<"Did Draw == true"<<std::endl;
+                noDrawCount=0;
+            }
+        }
+
         // --------------------------------------------------------------------------------------------
         // End Loop
 
@@ -377,7 +391,7 @@ int main(int argc, char *argv[])
 
     Example demo(argv[1]);
     // Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels
-    if (demo.Construct(200, 100, 3, 3))
+    if (demo.Construct(200, 150, 4, 4))
         demo.Start();
 
     return 0;

@@ -212,7 +212,7 @@ public:
             }
             else if(GetKey(olc::Key::ESCAPE).bHeld){
                     cur_scan_code = 0x76;
-              }
+            }
              else{
                  cur_scan_code = 0x0;
              }

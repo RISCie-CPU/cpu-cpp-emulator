@@ -101,7 +101,7 @@ Emulator::Types::BUSES_t DataMemory::load(Emulator::Types::control_lines_t *cont
         if (addr >> 30 == 0)
         {
             addr   = addr % 524288; // 2 ** 19
-            output = sign_extend(ram[addr], 8);
+            output = ram[addr];
             dbg("Data memory: lbu, 0x" << std::hex << output << " to WB (from: 0x" << std::hex << addr << ")");
         }
         // VRAM

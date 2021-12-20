@@ -101,7 +101,7 @@ void ALU_SH::update(Emulator::Types::BUSES_t *BUS_in, Emulator::Types::control_l
     {
         temp_output = operand_x | operand_y;
         // bltu
-        if (operand_x <= operand_y) temp_branch = 1;
+        if ((unsigned int)operand_x < (unsigned int)operand_y) temp_branch = 1;
     }
     // and
     else if (funct3 == 0b111)

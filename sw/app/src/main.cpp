@@ -366,13 +366,14 @@ public:
         //std::cout<<noDrawCount<<std::endl;
         if(didDraw==false){
             noDrawCount++;
-            if (noDrawCount>50){
+            if (noDrawCount>500000){
                 didDraw=true;
-                //std::cout<<"Did Draw == true"<<std::endl;
+                //std::cout<<"Did Draw = true"<<rand() % 100<<std::endl;
                 noDrawCount=0;
             }
+        }else{
+            noDrawCount=0;
         }
-
         // --------------------------------------------------------------------------------------------
         // End Loop
 

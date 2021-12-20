@@ -196,16 +196,16 @@ public:
                     cur_scan_code = 0x45;
             }
             else if(GetKey(olc::Key::UP).bHeld){
-                    cur_scan_code = 0x1;
+                    cur_scan_code = 0xA9;
             }
             else if(GetKey(olc::Key::DOWN).bHeld){
-                    cur_scan_code = 0x2;
+                    cur_scan_code = 0xAB;
             }
             else if(GetKey(olc::Key::LEFT).bHeld){
-                    cur_scan_code = 0x3;
+                    cur_scan_code = 0xAA;
             }
             else if(GetKey(olc::Key::RIGHT).bHeld){
-                    cur_scan_code = 0x4;
+                    cur_scan_code = 0xAC;
             }
             else if(GetKey(olc::Key::RETURN).bHeld){
                     cur_scan_code = 0x5A;

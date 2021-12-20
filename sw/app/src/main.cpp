@@ -212,7 +212,7 @@ public:
             }
             else if(GetKey(olc::Key::ESCAPE).bHeld){
                     cur_scan_code = 0x76;
-              }
+            }
              else{
                  cur_scan_code = 0x0;
              }
@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
 
     Example demo(argv[1]);
     // Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels
-    if (demo.Construct(200, 150, 4, 4))
+    if (demo.Construct(200, 150, 3, 3))
         demo.Start();
 
     return 0;

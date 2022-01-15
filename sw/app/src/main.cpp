@@ -303,36 +303,40 @@ public:
         if (control_lines.STR_TO_RAM == 1){
 
             if (BUS.ALU_TO_DM >> 30 == 1){
-                unsigned addr = BUS.ALU_TO_DM % 8192; 
+                unsigned addr = BUS.ALU_TO_DM % 131072; 
                 unsigned data = BUS.TR1_TO_RAMD;
 
-                int ypos = (int)(addr/32);
-                int xpos = (addr%32)*8;
+                int ypos = (int)(addr/512);
+                int xpos = addr%512;
 
-                int step = 8;
+                int r_clr = 0;
+                int g_clr = 0;
+                int b_clr = 0;
 
-                if (control_lines.funct3 == 0b001){
+                int step = 1;
+
+                if (control_lines.funct3 == 0b000){
                     //Byte
-                    step = 8;
-                    std::exit(1);
+                    // Not really nescessary:
+                    // step = 1;
+
                 }else if (control_lines.funct3 == 0b001){
                     //Half
-                    step = 16;
+                    step = 2;
                 }else if (control_lines.funct3 == 0b010){
                     //word
-                    step = 32;
+                    step = 4;
                 }
-                //Write to VRAM, so hijack and draw instead
-                // int pos  = (y * 256) + x;
-                // int test = Data_memory.video_ram[pos / 8] & (0b10000000 >> (pos % 8));
-                for(int i=0; i<step; i++){
-                    if(data&0b00000001==0x1){
-                        Draw(xpos+i,ypos,olc::Pixel(255,255,255));
-                    }else{
-                        Draw(xpos+i,ypos,olc::Pixel(0,0,0));
-                    }
-                    data=data >> 1;
+
+                for (int i=0; i<step; i++)
+                {
+                        r_clr = (data & (0b11100000 << (i*8))) >> 5 + (i*8);
+                        g_clr = (data & (0b00011100 << (i*8))) >> 2 + (i*8);
+                        b_clr = (data & (0b00000011 << (i*8))) >> 0 + (i*8);
+
+                        Draw(xpos+i, ypos, olc::Pixel(r_clr*36, g_clr*36 , b_clr*85));
                 }
+
                 didDraw = true;
             }else{
                 //All other memory
@@ -388,11 +392,9 @@ public:
 
 int main(int argc, char *argv[])
 {
-    dbg("Test output: " << 42 << " may be what we are looking for...");
-
     Example demo(argv[1]);
     // Screen Size of 320x240 pixels with each pixel representing 2x2 screen pixels
-    if (demo.Construct(200, 150, 3, 3))
+    if (demo.Construct(320, 240, 3, 3))
         demo.Start();
 
     return 0;

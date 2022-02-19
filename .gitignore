@@ -34,7 +34,7 @@
 
 # Build dir
 build/
-bin/
+!bin/*.bin
 
 # macOS
 .DS_Store

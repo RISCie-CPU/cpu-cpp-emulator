@@ -39,37 +39,15 @@ InstructionMemory::InstructionMemory(char *file_name)
         instruction_list = new DecodedInst[num_instructions];
 
         // Create a 32-bit buffer to hold a single instruction
-        char *buffer = new char[4];
-        unsigned int *buffer_int = new unsigned int[4];
+        int32_t current_instruction;
 
         // Integer version of instruction in little-endian
-        unsigned int current_instruction;
-        for (int i = 0; i < num_instructions; i++)
+        for (uint32_t pc = 0; pc < num_instructions; pc++)
         {
-            current_instruction = 0;
-
             // Reads 4 bytes into buffer char array
-            is.read(buffer, 4);
-
-            // Converts signed char into unsigned int
-            // This could be optimized for readabilty I think it is a good choice
-            for (int x = 0; x < 4; x++)
-            {
-                buffer_int[x] = (unsigned char) buffer[x];
-            }
-
-            // Converts little-endian data from char array to unsigned integer
-            // 31            24  23            16  15             8   7             0
-            // [X X X X X X X X] [X X X X X X X X] [X X X X X X X X] [X X X X X X X X]
-            //    buffer_int[0]     buffer_int[1]     buffer_int[2]    buffer_int[3]
-            current_instruction = (buffer_int[0] << 24) + (buffer_int[1] << 16) + (buffer_int[2] << 8) + (buffer_int[3]);
-
-            instruction_list[i] = DecodedInst(current_instruction);
+            is.read((char *) &current_instruction, 4);
+            instruction_list[pc] = DecodedInst(current_instruction);
         }
-        // Buffers are no longer needed
-        delete[] buffer;
-        delete[] buffer_int;
-
 
         if (is)
         {
@@ -85,12 +63,12 @@ InstructionMemory::InstructionMemory(char *file_name)
 }
 
 // Returns a decoded_instruction from list at index
-DecodedInst InstructionMemory::get_decoded_inst(unsigned int number)
+DecodedInst InstructionMemory::get_decoded_inst(uint32_t number)
 {
     return instruction_list[number];
 }
 
-DecodedInst::DecodedInst(unsigned int instruction_in)
+DecodedInst::DecodedInst(uint32_t instruction_in)
 {
     my_type     = BREAK_TYPE;
     rs1         = Emulator::Consts::UNUSED_VAL;
@@ -140,9 +118,9 @@ void DecodedInst::print_info()
     // std::cout << "--------------------------------------------\n";
 }
 
-unsigned int DecodedInst::get_bits(int high_bit, int low_bit)
+uint32_t DecodedInst::get_bits(int high_bit, int low_bit)
 {
-    unsigned int mask;
+    uint32_t mask;
     mask = ((1 << (high_bit - low_bit + 1)) - 1) << low_bit;
 
     // Used for debugging with #include <bitset>
@@ -153,19 +131,19 @@ unsigned int DecodedInst::get_bits(int high_bit, int low_bit)
 }
 
 // 0, 12
-signed int DecodedInst::sign_extend(signed int data, int data_lenght)
+int32_t DecodedInst::sign_extend(int32_t data, int32_t data_lenght)
 {
     // 32-12 = 20
-    int remaining_bits = 32 - data_lenght;
-    int mask = pow(2, data_lenght) - 1;
+    int32_t remaining_bits = 32 - data_lenght;
+    int32_t mask = pow(2, data_lenght) - 1;
 
-    signed int sign_extended_data = (data & mask) << remaining_bits;
+    int32_t sign_extended_data = (data & mask) << remaining_bits;
     sign_extended_data >>= remaining_bits;
 
     return sign_extended_data;
 }
 
-bool DecodedInst::process_inst(unsigned int instruction_in)
+bool DecodedInst::process_inst(uint32_t instruction_in)
 {
     instruction = instruction_in;
     return process_inst();

@@ -11,7 +11,7 @@ void RegisterFile::Test()
 {
     for (int i = 0; i < 32; i++)
         info(
-            "R" << std::dec << i << std::hex << ": " << register_array[i].stored_value
+            "R" << std::dec << std::setfill('0') << std::setw(2) << i << std::hex << std::uppercase << ": 0x" << std::setfill('0') << std::setw(8) << register_array[i].stored_value
         );
 }
 

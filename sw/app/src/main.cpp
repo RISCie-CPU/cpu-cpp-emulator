@@ -414,7 +414,9 @@ public:
 
             // Store to register file in needed
             if (control_lines.STR_TO_RF == 1) Register_file.write(BUS, current_inst.rd);
-            Register_file.Test();
+
+            // DEBUG:
+            // Register_file.Test();
 
             // Store to program counter + load new value (loading new value is done @ falling edge)
             BUS = Program_counter.update_BUS(BUS, control_lines, 1, 0);
@@ -422,11 +424,11 @@ public:
             // For debug only
             counter++;
 
-            if (counter == 10)
-            {
-                exit(3);
-                return true;
-            }
+            // if (counter == 33)
+            // {
+            //     exit(3);
+            //     return true;
+            // }
 
             // std::cout<<noDrawCount<<std::endl;
             if (didDraw == false)

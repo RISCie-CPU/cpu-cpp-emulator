@@ -424,8 +424,7 @@ public:
 
             if (counter == 10)
             {
-                info("TUUUUUUUU");
-                exit(2);
+                exit(3);
                 return true;
             }
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "debug.hpp"
 #include "types.hpp"
 #include "consts.hpp"
 #include "register.hpp"

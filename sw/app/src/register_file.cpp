@@ -1,5 +1,5 @@
 #include "register_file.hpp"
-#include "debug.hpp"
+
 
 RegisterFile::RegisterFile()
 {
@@ -10,10 +10,9 @@ RegisterFile::RegisterFile()
 void RegisterFile::Test()
 {
     for (int i = 0; i < 32; i++)
-    {
-        std::cout << "R[" << std::dec << i << "]" << std::hex << ": 0x" << register_array[i].stored_value << ", ";
-    }
-    std::cout << "\n";
+        info(
+            "R" << std::dec << i << std::hex << ": " << register_array[i].stored_value
+        );
 }
 
 void RegisterFile::write(Emulator::Types::BUSES_t &BUS_in, int rd)

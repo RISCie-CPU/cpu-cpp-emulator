@@ -12,7 +12,7 @@ TARGET = cpu-emulator
 ########################################
 # Compile for debugging?
 # (1 ... yes, 0 ... no)
-DEBUG = 0
+DEBUG = 1
 # optimization
 OPT = -O2
 

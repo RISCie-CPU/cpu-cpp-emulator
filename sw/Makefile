@@ -102,7 +102,7 @@ $(BUILD_DIR):
 # Run
 #######################################
 run:
-	@./$(BUILD_DIR)/$(TARGET) ../tests/bin/program.bin
+	@./$(BUILD_DIR)/$(TARGET) ../bin/color_test.bin
 
 #######################################
 # Clean up

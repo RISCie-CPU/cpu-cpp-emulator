@@ -22,3 +22,18 @@ git submodule init
 # the last command clone the submodules
 git submodule update
 ```
+
+## Compilation
+
+Compilation is built on a Makefile, run as follows:
+
+```bash
+# it is necessary to be in the folder where the Makefile is located
+make
+```
+
+Compilation requires the `png.h` library to be installed on the system, this can be achieved on debian derivatives as follows:
+
+```bash
+sudo apt install libpng-dev
+```
